@@ -8,7 +8,6 @@ function App() {
         createChat({
             webhookUrl: import.meta.env.VITE_N8N_WEBHOOK_URL,
             mode: 'fullscreen',
-            chatSessionKey: crypto.randomUUID(),
             initialMessages: [],
             i18n: {
                 en: {
@@ -17,6 +16,7 @@ function App() {
                     footer: '',
                     getStarted: 'New Conversation',
                     inputPlaceholder: "Let's take off!",
+                    closeButtonTooltip: "",
                 },
             },
         });
