@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import * as XLSX from 'xlsx';
 import { api } from '../utils/api';
 import type { PensionCalculationAuditing } from '../types/pension';
@@ -7,6 +7,8 @@ import AssessmentIcon from '@mui/icons-material/Assessment';
 import PeopleIcon from '@mui/icons-material/People';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { calculateVoivodeshipStats } from '../utils/zipCodeMapping';
+import PolandMapVisualization from '../components/PolandMapVisualization';
 
 interface DashboardStats {
     totalCalculations: number;
@@ -20,6 +22,7 @@ interface DashboardStats {
 
 function Admin() {
     const [loading, setLoading] = useState(false);
+    const [auditData, setAuditData] = useState<PensionCalculationAuditing[]>([]);
     const [stats, setStats] = useState<DashboardStats>({
         totalCalculations: 0,
         todayCalculations: 0,
@@ -34,9 +37,16 @@ function Admin() {
         loadStats();
     }, []);
 
+    const voivodeshipData = useMemo(() => {
+        const zipCodes = auditData.map(item => item.request.zipCode);
+        return calculateVoivodeshipStats(zipCodes);
+    }, [auditData]);
+
     const loadStats = async () => {
         try {
             const data = await api.get<PensionCalculationAuditing[]>('/pension/audit');
+
+            setAuditData(data);
 
             if (data.length === 0) {
                 return;
@@ -225,6 +235,13 @@ function Admin() {
                         </p>
                     </div>
                 </div>
+
+                {/* Voivodeship Visualization */}
+                {voivodeshipData.length > 0 && (
+                    <div className="mb-8">
+                        <PolandMapVisualization data={voivodeshipData} />
+                    </div>
+                )}
 
                 {/* Download Section */}
                 <div className="bg-white rounded-lg shadow-md p-8 text-center">
