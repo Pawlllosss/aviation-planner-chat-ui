@@ -24,6 +24,8 @@ ChartJS.register(
     annotationPlugin
 );
 
+const AVERAGE_PENSION_MEN = 4979;
+const AVERAGE_PENSION_WOMEN = 3422;
 const AVERAGE_PENSION = 3500;
 
 function LandingStack() {
@@ -63,54 +65,108 @@ function LandingStack() {
 
     }, [amount]);
 
-    const isRealistic = debouncedAmount <= 4000;
-    const difference = debouncedAmount - AVERAGE_PENSION;
+    const isRealistic = debouncedAmount <= AVERAGE_PENSION_MEN;
+    const difference = debouncedAmount - AVERAGE_PENSION_MEN;
 
     const chartData = {
-        labels: ['Chcę', 'Średnia ZUS'],
+        labels: ['Chcę                                                    ', '              Średnia ZUS'],
         datasets: [{
-            data: [debouncedAmount, AVERAGE_PENSION],
-            backgroundColor: [
-                isRealistic ? 'rgb(0, 153, 63)' : 'rgb(240, 94, 94)',
-                'rgb(63, 132, 210)'
-            ],
+            label: 'Chcę',
+            data: [debouncedAmount],
+            backgroundColor: isRealistic ? 'rgb(0, 153, 63)' : 'rgb(240, 94, 94)',
             borderRadius: 8,
             barThickness: 120
+        }, {
+            label: 'Średnia kobiet',
+            data: [null, AVERAGE_PENSION_WOMEN],
+            backgroundColor: 'rgb(147, 112, 219)',
+            borderRadius: 8,
+            barThickness: 60
+        }, {
+            label: 'Średnia mężczyzn',
+            data: [null, AVERAGE_PENSION_MEN],
+            backgroundColor: 'rgb(63, 132, 210)',
+            borderRadius: 8,
+            barThickness: 60
         }]
     };
 
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+            margin: {
+                left: 0,
+                right: 0
+            }
+        },
         plugins: {
             legend: {
-                display: false
+                display: true,
+                position: 'bottom' as const,
+                labels: {
+                    font: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    color: 'rgb(0, 65, 110)',
+                    padding: 15,
+                    usePointStyle: true,
+                    pointStyle: 'rectRounded',
+                    filter: (legendItem: any) => legendItem.text !== 'Chcę'
+                }
             },
             tooltip: {
                 callbacks: {
-                    label: (context: any) => `${context.parsed.y.toLocaleString('pl-PL')} zł`
+                    label: (context: any) => {
+                        const label = context.dataset.label || '';
+                        const value = context.parsed.y.toLocaleString('pl-PL');
+                        return `${label}: ${value} zł`;
+                    }
                 }
             },
             annotation: {
                 annotations: {
-                    averageLine: {
+                    womenLine: {
                         type: 'line' as const,
-                        yMin: AVERAGE_PENSION,
-                        yMax: AVERAGE_PENSION,
-                        borderColor: 'rgb(63, 132, 210)',
+                        yMin: AVERAGE_PENSION_WOMEN,
+                        yMax: AVERAGE_PENSION_WOMEN,
+                        borderColor: 'rgb(147, 112, 219)',
                         borderWidth: 2,
                         borderDash: [6, 6],
                         label: {
                             display: true,
-                            content: `Średnia: ${AVERAGE_PENSION.toLocaleString('pl-PL')} zł`,
-                            position: 'end',
-                            backgroundColor: 'rgb(63, 132, 210)',
+                            content: `Średnia kobiet: ${AVERAGE_PENSION_WOMEN.toLocaleString('pl-PL')} zł`,
+                            position: 'center',
+                            backgroundColor: 'rgb(147, 112, 219)',
                             color: 'white',
                             font: {
-                                size: 12,
+                                size: 11,
                                 weight: 'bold'
                             },
-                            padding: 6
+                            padding: 4,
+                            yAdjust: -10
+                        }
+                    },
+                    menLine: {
+                        type: 'line' as const,
+                        yMin: AVERAGE_PENSION_MEN,
+                        yMax: AVERAGE_PENSION_MEN,
+                        borderColor: 'rgb(0, 65, 110)',
+                        borderWidth: 2,
+                        borderDash: [6, 6],
+                        label: {
+                            display: true,
+                            content: `Średnia mężczyzn: ${AVERAGE_PENSION_MEN.toLocaleString('pl-PL')} zł`,
+                            position: 'center',
+                            backgroundColor: 'rgb(0, 65, 110)',
+                            color: 'white',
+                            font: {
+                                size: 11,
+                                weight: 'bold'
+                            },
+                            padding: 4,
+                            yAdjust: -10
                         }
                     }
                 }
@@ -195,7 +251,10 @@ function LandingStack() {
                                             setAmount(newValue);
                                             setDisplayAmount(formatNumber(newValue));
                                         }}
-                                        marks={[{ value: AVERAGE_PENSION, label: 'Średnia krajowa' }]}
+                                        marks={[
+                                            { value: AVERAGE_PENSION_WOMEN, label: 'Średnia kobiet' },
+                                            { value: AVERAGE_PENSION_MEN, label: 'Średnia mężczyzn' }
+                                        ]}
                                         valueLabelDisplay="auto"
                                         min={1000}
                                         max={25000}
@@ -227,17 +286,29 @@ function LandingStack() {
                                                 },
                                             },
                                             '& .MuiSlider-mark': {
-                                                backgroundColor: 'rgb(63, 132, 210)',
                                                 height: 16,
                                                 width: 4,
                                                 borderRadius: 2,
                                                 opacity: 1,
+                                                '&[data-index="0"]': {
+                                                    backgroundColor: 'rgb(147, 112, 219)',
+                                                },
+                                                '&[data-index="1"]': {
+                                                    backgroundColor: 'rgb(0, 65, 110)',
+                                                },
                                             },
                                             '& .MuiSlider-markLabel': {
-                                                color: 'rgb(63, 132, 210)',
                                                 fontWeight: 700,
                                                 fontSize: '1rem',
-                                                marginTop: '8px',
+                                                '&[data-index="0"]': {
+                                                    top: '-40px',
+                                                    marginTop: '0px',
+                                                    color: 'rgb(147, 112, 219)',
+                                                },
+                                                '&[data-index="1"]': {
+                                                    marginTop: '8px',
+                                                    color: 'rgb(0, 65, 110)',
+                                                },
                                             },
                                         }}
                                     />
@@ -264,7 +335,7 @@ function LandingStack() {
                                         {isRealistic ? '💚' : '🔥'}
                                     </span>
                                     <span>
-                                        {isRealistic ? 'Możliwe do osiągnięcia!' : 'Średnia to 3 500 zł'}
+                                        {isRealistic ? 'Możliwe do osiągnięcia!' : `Średnia to ${AVERAGE_PENSION_MEN.toLocaleString('pl-PL')} zł`}
                                     </span>
                                 </div>
                             </div>
