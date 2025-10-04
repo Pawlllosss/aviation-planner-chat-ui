@@ -49,7 +49,7 @@ const Dashboard = () => {
     datasets: [
       {
         label: 'Wysokość rzeczywista',
-        data: accountProgression.map(item => item.balanceReal),
+        data: accountProgression.map(item => item.balanceNominal),
         borderColor: 'rgb(0, 153, 63)',
         backgroundColor: 'rgba(0, 153, 63, 0.1)',
         fill: true,
@@ -59,8 +59,8 @@ const Dashboard = () => {
         borderWidth: 3,
       },
       {
-        label: 'Wysokość urealniona',
-        data: accountProgression.map(item => item.balanceNominal),
+        label: 'Wysokość z uwzględnieniem inflacji',
+        data: accountProgression.map(item => item.balanceReal),
         borderColor: 'rgb(63, 132, 210)',
         backgroundColor: 'rgba(63, 132, 210, 0.1)',
         fill: true,
@@ -209,7 +209,7 @@ const Dashboard = () => {
           {/* Real Pension Card */}
           <div className="p-8 rounded-xl shadow-lg" style={{ backgroundColor: 'rgba(63, 132, 210, 0.05)', border: '3px solid rgb(63, 132, 210)' }}>
             <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: 'rgb(0, 65, 110)' }}>
-              Wysokość urealniona
+              Wysokość z uwzględnieniem inflacji
             </h2>
 
             <div className="space-y-4">
