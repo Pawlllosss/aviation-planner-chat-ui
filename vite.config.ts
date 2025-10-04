@@ -15,5 +15,12 @@ export default defineConfig({
         host: true,
         origin: "http://0.0.0.0:8080",
         allowedHosts: true,
+        proxy: {
+            '/api': {
+                target: 'https://hackyeah2025be.oczadly.com',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, ''),
+            },
+        },
     },
 })

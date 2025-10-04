@@ -61,6 +61,9 @@ Vite is configured for Docker deployment:
 - `host: true` enables external access
 - `allowedHosts: true` allows any host (for containerized environments)
 - Origin set to `http://0.0.0.0:8080`
+- **Proxy:** `/api/*` routes are proxied to `https://hackyeah2025be.oczadly.com` (development only)
+  - `/api/demos` → `https://hackyeah2025be.oczadly.com/demos`
+  - The `/api` prefix is stripped when forwarding requests
 
 ## Docker Deployment
 
@@ -79,6 +82,8 @@ The Dockerfile:
 
 ## API Integration
 
+The application uses `/api/*` routes which are proxied to `https://hackyeah2025be.oczadly.com` during development.
+
 Example API call for demos endpoint:
 
 ```bash
@@ -86,3 +91,10 @@ curl -X 'GET' \
   'https://hackyeah2025be.oczadly.com/demos' \
   -H 'accept: */*'
 ```
+
+In the application, use relative paths:
+```typescript
+fetch('/api/demos')  // Proxied to https://hackyeah2025be.oczadly.com/demos in dev
+```
+
+**Note:** The proxy only works in development (`npm run dev`). For production builds, you'll need to configure the API URL appropriately or use a runtime proxy/reverse proxy.
