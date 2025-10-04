@@ -34,6 +34,8 @@ export interface PensionRequest {
   grossSalary: number;
   retirementYear: number;
   expectedPension: number;
+  includeSickLeave: boolean;
+  avgSickDaysPerYear: number;
   zipCode?: string;
 }
 
