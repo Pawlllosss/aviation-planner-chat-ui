@@ -167,44 +167,53 @@ const Dashboard = () => {
 
             <div className="space-y-4">
               <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Z uwzględnieniem chorobowych:</span>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Z uwzględnieniem chorobowych</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(0, 153, 63)' }}>
                   {formatNumber(nominalPension.withSickLeave)} zł
                 </span>
               </div>
 
               <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Bez uwzględnienia chorobowych:</span>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Bez uwzględnienia chorobowych</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(0, 153, 63)' }}>
                   {formatNumber(nominalPension.withoutSickLeave)} zł
                 </span>
               </div>
 
               <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Stopa zastąpienia:</span>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Stopa zastąpienia</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(63, 132, 210)' }}>
                   {formatNumber(nominalPension.replacementRate)}%
                 </span>
               </div>
 
               <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Porównanie do średniej emerytury:</span>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Porównanie do średniej emerytury</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(63, 132, 210)' }}>
                   {formatNumber(nominalPension.vsAveragePension)}%
                 </span>
               </div>
 
-              <div className="flex justify-between items-center py-3">
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Średnia prognozowana emerytura w {retirementYear}:</span>
+              <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Średnia prognozowana emerytura w {retirementYear}</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(0, 153, 63)' }}>
                   {formatNumber(nominalPension.finalAveragePension)} zł
                 </span>
               </div>
 
+              <div className="py-3">
+                <div className="flex justify-between items-start gap-4">
+                  <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Prognozowana pensja w dniu przejścia na emeryturę</span>
+                  <span className="text-2xl font-bold text-right whitespace-nowrap" style={{ color: 'rgb(0, 153, 63)' }}>
+                    {formatNumber(nominalPension.finalSalary)} zł
+                  </span>
+                </div>
+              </div>
+
               {nominalPension.salaryNeededForExpected && (
                 <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(255, 179, 79, 0.2)', border: '2px solid rgb(255, 179, 79)' }}>
                   <div className="flex justify-between items-center">
-                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Wymagana pensja dla oczekiwanej emerytury:</span>
+                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Wymagana pensja dla oczekiwanej emerytury</span>
                     <span className="text-xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
                       {formatNumber(nominalPension.salaryNeededForExpected)} zł
                     </span>
@@ -222,44 +231,53 @@ const Dashboard = () => {
 
             <div className="space-y-4">
               <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Z uwzględnieniem chorobowych:</span>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Z uwzględnieniem chorobowych</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(63, 132, 210)' }}>
                   {formatNumber(realPension.withSickLeave)} zł
                 </span>
               </div>
 
               <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Bez uwzględnienia chorobowych:</span>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Bez uwzględnienia chorobowych</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(63, 132, 210)' }}>
                   {formatNumber(realPension.withoutSickLeave)} zł
                 </span>
               </div>
 
               <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Stopa zastąpienia:</span>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Stopa zastąpienia</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(0, 153, 63)' }}>
                   {formatNumber(realPension.replacementRate)}%
                 </span>
               </div>
 
               <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Porównanie do średniej emerytury:</span>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Porównanie do średniej emerytury</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(0, 153, 63)' }}>
                   {formatNumber(realPension.vsAveragePension)}%
                 </span>
               </div>
 
-              <div className="flex justify-between items-center py-3">
-                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Średnia prognozowana emerytura w {retirementYear}:</span>
+              <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Średnia prognozowana emerytura w {retirementYear}</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(63, 132, 210)' }}>
                   {formatNumber(realPension.finalAveragePension)} zł
                 </span>
               </div>
 
+              <div className="py-3">
+                <div className="flex justify-between items-start gap-4">
+                  <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Prognozowana pensja w dniu przejścia na emeryturę</span>
+                  <span className="text-2xl font-bold text-right whitespace-nowrap" style={{ color: 'rgb(63, 132, 210)' }}>
+                    {formatNumber(realPension.finalSalary)} zł
+                  </span>
+                </div>
+              </div>
+
               {realPension.salaryNeededForExpected && (
                 <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(255, 179, 79, 0.2)', border: '2px solid rgb(255, 179, 79)' }}>
                   <div className="flex justify-between items-center">
-                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Wymagana pensja dla oczekiwanej emerytury:</span>
+                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Wymagana pensja dla oczekiwanej emerytury</span>
                     <span className="text-xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
                       {formatNumber(realPension.salaryNeededForExpected)} zł
                     </span>
