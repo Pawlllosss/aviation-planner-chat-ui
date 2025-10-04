@@ -127,7 +127,12 @@ function LandingStack() {
                                         textAlign: 'center',
                                         '& input': {
                                             textAlign: 'center',
-                                            padding: '16px 20px'
+                                            padding: '16px 20px',
+                                            MozAppearance: 'textfield'
+                                        },
+                                        '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+                                            WebkitAppearance: 'none',
+                                            margin: 0
                                         }
                                     }
                                 }
