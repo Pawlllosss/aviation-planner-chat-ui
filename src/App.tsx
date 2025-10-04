@@ -2,6 +2,7 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DemosExample from './DemosExample';
 import Admin from './pages/Admin';
+import LandingStack from './pages/LandingStack';
 
 function App() {
     return (
@@ -9,6 +10,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<DemosExample />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/stack" element={<LandingStack />} />
             </Routes>
         </BrowserRouter>
     );
