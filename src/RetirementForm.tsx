@@ -63,7 +63,7 @@ const RetirementForm = () => {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-16">
           {/* Age Section */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '2rem', display: 'block' }}>
+            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
               Twój wiek
             </label>
             <input
@@ -77,7 +77,7 @@ const RetirementForm = () => {
 
           {/* Gender Section */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '2rem', display: 'block' }}>
+            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
               Płeć
             </label>
             <div className="flex gap-8 justify-center">
@@ -106,7 +106,7 @@ const RetirementForm = () => {
 
           {/* Retirement Year */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '2rem', display: 'block' }}>
+            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
               Planowany rok przejścia na emeryturę
             </label>
             <input
@@ -119,95 +119,103 @@ const RetirementForm = () => {
             {errors.retirementYear && <p className="text-red-500 mt-2">{errors.retirementYear.message}</p>}
           </div>
 
-          {/* Job Entries Section */}
-          <div className="pt-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-6" style={{ color: 'rgb(0, 65, 110)' }}>
-                Historia zatrudnienia
-              </h2>
-              <p className="text-gray-600 text-lg">Dodaj swoje miejsca pracy, zaczynając od najnowszego</p>
-            </div>
+          {/*/!* Job Entries Section *!/*/}
+          {/*<div className="pt-8">*/}
+          {/*  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>*/}
+          {/*    <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '2rem', display: 'block' }}>*/}
+          {/*      Historia zatrudnienia*/}
+          {/*    </label>*/}
 
-            <div className="space-y-6 max-w-3xl mx-auto">
-              {fields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="p-6 rounded-xl transition-all"
-                  style={{
-                    backgroundColor: 'white',
-                    border: '2px solid rgb(190, 195, 206)',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="text-lg font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
-                      Praca #{index + 1}
-                    </span>
-                    {fields.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => remove(index)}
-                        className="text-base px-4 py-1 rounded-lg transition-colors"
-                        style={{
-                          color: 'rgb(240, 94, 94)',
-                          backgroundColor: 'rgba(240, 94, 94, 0.1)',
-                          fontWeight: '600'
-                        }}
-                      >
-                        Usuń
-                      </button>
-                    )}
-                  </div>
+          {/*    <div className="space-y-6 w-full max-w-2xl">*/}
+          {/*      {fields.map((field, index) => (*/}
+          {/*        <div*/}
+          {/*          key={field.id}*/}
+          {/*          className="p-6 rounded-lg transition-all"*/}
+          {/*          style={{*/}
+          {/*            backgroundColor: 'rgba(190, 195, 206, 0.08)',*/}
+          {/*            border: '2px solid rgb(190, 195, 206)'*/}
+          {/*          }}*/}
+          {/*        >*/}
+          {/*          /!* Salary Row *!/*/}
+          {/*          <div className="flex items-center gap-4 mb-6">*/}
+          {/*            <label className="text-lg font-semibold flex items-center gap-2 flex-shrink-0" style={{ color: 'rgb(0, 65, 110)' }}>*/}
+          {/*              <AttachMoneyIcon /> Zarobki miesięcznie:*/}
+          {/*            </label>*/}
+          {/*            <div className="flex-1"></div>*/}
+          {/*            <input*/}
+          {/*              type="number"*/}
+          {/*              {...register(`jobEntries.${index}.salary`, { required: 'Zarobki są wymagane' })}*/}
+          {/*              placeholder="5000"*/}
+          {/*              className="text-2xl font-bold px-4 py-3 border-b-4 outline-none transition-colors bg-transparent"*/}
+          {/*              style={{*/}
+          {/*                borderColor: watch(`jobEntries.${index}.salary`) ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)',*/}
+          {/*                color: 'rgb(0, 65, 110)',*/}
+          {/*                width: '250px'*/}
+          {/*              }}*/}
+          {/*            />*/}
+          {/*          </div>*/}
+          {/*          {errors.jobEntries?.[index]?.salary && (*/}
+          {/*            <p className="text-red-500 mt-1 text-xs text-right mb-4">{errors.jobEntries[index]?.salary?.message}</p>*/}
+          {/*          )}*/}
 
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-base mb-3" style={{ color: 'rgb(0, 65, 110)', fontWeight: '700' }}>
-                        Zarobki (zł/mies.)
-                      </label>
-                      <input
-                        type="number"
-                        {...register(`jobEntries.${index}.salary`, { required: 'Zarobki są wymagane' })}
-                        className="w-full text-2xl font-bold border-b-4 outline-none bg-transparent py-3 transition-colors"
-                        style={{ borderColor: watch(`jobEntries.${index}.salary`) ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
-                      />
-                      {errors.jobEntries?.[index]?.salary && (
-                        <p className="text-red-500 mt-2 text-sm">{errors.jobEntries[index]?.salary?.message}</p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="block text-base mb-3" style={{ color: 'rgb(0, 65, 110)', fontWeight: '700' }}>
-                        Rok rozpoczęcia
-                      </label>
-                      <input
-                        type="number"
-                        {...register(`jobEntries.${index}.year`, { required: 'Rok rozpoczęcia jest wymagany' })}
-                        className="w-full text-2xl font-bold border-b-4 outline-none bg-transparent py-3 transition-colors"
-                        style={{ borderColor: watch(`jobEntries.${index}.year`) ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
-                      />
-                      {errors.jobEntries?.[index]?.year && (
-                        <p className="text-red-500 mt-2 text-sm">{errors.jobEntries[index]?.year?.message}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+          {/*          /!* Year Row *!/*/}
+          {/*          <div className="flex items-center gap-4 mb-4">*/}
+          {/*            <label className="text-lg font-semibold flex items-center gap-2 flex-shrink-0" style={{ color: 'rgb(0, 65, 110)' }}>*/}
+          {/*              <CalendarTodayIcon /> Rok rozpoczęcia:*/}
+          {/*            </label>*/}
+          {/*            <div className="flex-1"></div>*/}
+          {/*            <input*/}
+          {/*              type="number"*/}
+          {/*              {...register(`jobEntries.${index}.year`, { required: 'Rok jest wymagany' })}*/}
+          {/*              placeholder="2020"*/}
+          {/*              className="text-2xl font-bold px-4 py-3 border-b-4 outline-none transition-colors bg-transparent"*/}
+          {/*              style={{*/}
+          {/*                borderColor: watch(`jobEntries.${index}.year`) ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)',*/}
+          {/*                color: 'rgb(0, 65, 110)',*/}
+          {/*                width: '250px'*/}
+          {/*              }}*/}
+          {/*            />*/}
+          {/*          </div>*/}
+          {/*          {errors.jobEntries?.[index]?.year && (*/}
+          {/*            <p className="text-red-500 mt-1 text-xs text-right mb-4">{errors.jobEntries[index]?.year?.message}</p>*/}
+          {/*          )}*/}
 
-              <div className="text-center pt-4">
-                <button
-                  type="button"
-                  onClick={() => append({ salary: '', year: '' })}
-                  className="inline-flex items-center gap-2 px-8 py-3 text-lg font-semibold text-white rounded-lg transition-transform hover:scale-105 shadow-md"
-                  style={{ backgroundColor: 'rgb(63, 132, 210)' }}
-                >
-                  <span className="text-2xl">+</span>
-                  <span>Dodaj kolejną pracę</span>
-                </button>
-              </div>
-            </div>
-          </div>
+          {/*          /!* Remove Button *!/*/}
+          {/*          {fields.length > 1 && (*/}
+          {/*            <div className="flex justify-center mt-4">*/}
+          {/*              <button*/}
+          {/*                type="button"*/}
+          {/*                onClick={() => remove(index)}*/}
+          {/*                className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-all hover:opacity-90"*/}
+          {/*                style={{*/}
+          {/*                  color: 'white',*/}
+          {/*                  backgroundColor: 'rgb(240, 94, 94)'*/}
+          {/*                }}*/}
+          {/*                title="Usuń źródło dochodu"*/}
+          {/*              >*/}
+          {/*                <RemoveIcon />*/}
+          {/*                <span>Usuń źródło dochodu</span>*/}
+          {/*              </button>*/}
+          {/*            </div>*/}
+          {/*          )}*/}
+          {/*        </div>*/}
+          {/*      ))}*/}
+
+          {/*      <button*/}
+          {/*        type="button"*/}
+          {/*        onClick={() => append({ salary: '', year: '' })}*/}
+          {/*        className="w-full flex items-center justify-center gap-2 px-6 py-4 text-lg font-semibold text-white rounded-lg transition-all hover:opacity-90"*/}
+          {/*        style={{ backgroundColor: 'rgb(63, 132, 210)' }}*/}
+          {/*      >*/}
+          {/*        <AddIcon />*/}
+          {/*        <span>Dodaj źródło dochodu</span>*/}
+          {/*      </button>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
 
           {/* Submit Button */}
-          <div className="text-center pt-8">
+          <div className="text-center">
             <button
               type="submit"
               className="text-2xl font-bold px-16 py-5 rounded-lg text-white transition-transform hover:scale-105 shadow-lg"
