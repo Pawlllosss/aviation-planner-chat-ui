@@ -1,30 +1,38 @@
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from "axios";
 
 interface FormData {
   age: number;
-  gender: 'male' | 'female';
+  sex: 'M' | 'F';
+  startYear: number;
+  grossSalary: number;
   retirementYear: number;
-  currentSalary: number;
+  expectedPension: number;
 }
 
 const RetirementForm = () => {
+  const location = useLocation();
+  const desiredAmount = location.state?.desiredAmount || 0;
+
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormData>({
     defaultValues: {
       age: 35,
-      gender: 'male',
+      sex: 'M',
+      grossSalary: 5050,
+      startYear: 2025,
       retirementYear: 2060,
-      currentSalary: 5050
+      expectedPension: desiredAmount
     }
   });
 
   const age = watch('age');
-  const gender = watch('gender');
+  const sex = watch('sex');
 
-  // Calculate default retirement year based on age and gender
+  // Calculate default retirement year based on age and sex
   useEffect(() => {
-    if (!age || !gender) return;
+    if (!age || !sex) return;
 
     const ageNum = parseInt(age);
     if (isNaN(ageNum)) return;
@@ -33,10 +41,10 @@ const RetirementForm = () => {
     const birthYear = currentYear - ageNum;
 
     // Default retirement ages: male 65, female 60
-    const retirementAge = gender === 'male' ? 65 : 60;
-    const calculatedYear = (birthYear + retirementAge).toString();
+    const retirementAge = sex === 'M' ? 65 : 60;
+    const calculatedYear = birthYear + retirementAge;
     setValue('retirementYear', calculatedYear);
-  }, [age, gender, setValue]);
+  }, [age, sex, setValue]);
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -58,6 +66,20 @@ const RetirementForm = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-16">
+          {/* Desired Pension */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
+              Oczekiwana emerytura miesięczna
+            </label>
+            <input
+              type="number"
+              {...register('expectedPension', { required: 'Oczekiwana emerytura jest wymagana', valueAsNumber: true })}
+              className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
+              style={{ borderColor: watch('expectedPension') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
+            />
+            {errors.expectedPension && <p className="text-red-500 mt-2">{errors.expectedPension.message}</p>}
+          </div>
+
           {/* Age Section */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
@@ -72,6 +94,20 @@ const RetirementForm = () => {
             {errors.age && <p className="text-red-500 mt-2">{errors.age.message}</p>}
           </div>
 
+          {/* Start Work Year Section */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
+              Rok rozpoczęcia pracy
+            </label>
+            <input
+                type="number"
+                {...register('startYear', { required: 'Rok rozpoczecia pracy jest wymagany', valueAsNumber: true })}
+                className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
+                style={{ borderColor: watch('startYear') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
+            />
+            {errors.startYear && <p className="text-red-500 mt-2">{errors.startYear.message}</p>}
+          </div>
+
           {/* Gender Section */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
@@ -81,8 +117,8 @@ const RetirementForm = () => {
               <label className="flex items-center cursor-pointer">
                 <input
                   type="radio"
-                  {...register('gender', { required: true })}
-                  value="male"
+                  {...register('sex', { required: true })}
+                  value="M"
                   className="w-6 h-6 mr-3"
                   style={{ accentColor: 'rgb(63, 132, 210)' }}
                 />
@@ -91,8 +127,8 @@ const RetirementForm = () => {
               <label className="flex items-center cursor-pointer">
                 <input
                   type="radio"
-                  {...register('gender', { required: true })}
-                  value="female"
+                  {...register('sex', { required: true })}
+                  value="F"
                   className="w-6 h-6 mr-3"
                   style={{ accentColor: 'rgb(63, 132, 210)' }}
                 />
@@ -123,11 +159,11 @@ const RetirementForm = () => {
             </label>
             <input
               type="number"
-              {...register('currentSalary', { required: 'Obecne zarobki są wymagane', valueAsNumber: true })}
+              {...register('grossSalary', { required: 'Obecne zarobki są wymagane', valueAsNumber: true })}
               className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
-              style={{ borderColor: watch('currentSalary') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
+              style={{ borderColor: watch('grossSalary') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
             />
-            {errors.currentSalary && <p className="text-red-500 mt-2">{errors.currentSalary.message}</p>}
+            {errors.grossSalary && <p className="text-red-500 mt-2">{errors.grossSalary.message}</p>}
           </div>
 
           {/*/!* Job Entries Section *!/*/}

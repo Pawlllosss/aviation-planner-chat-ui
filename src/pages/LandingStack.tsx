@@ -287,7 +287,7 @@ function LandingStack() {
 
                         <div className="flex justify-center mt-12">
                             <button
-                                onClick={() => navigate('/calculator')}
+                                onClick={() => navigate('/calculator', { state: { desiredAmount: debouncedAmount } })}
                                 className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
                                 style={{
                                     backgroundColor: 'rgb(0, 153, 63)',
