@@ -177,14 +177,14 @@ function LandingStack() {
 
                         {/* Slider section */}
                         <div className="relative">
-                            <div className="grid grid-cols-[auto_1fr_auto] items-center gap-8">
-                                {/* Min label - left side */}
-                                <div className="flex flex-col items-start" style={{ color: 'rgba(0, 65, 110, 0.6)', minWidth: '100px' }}>
-                                    <div className="text-lg font-semibold whitespace-nowrap">1 000 zł</div>
+                            <div className="flex items-center gap-8">
+                                {/* Min label - left */}
+                                <div className="text-lg font-semibold whitespace-nowrap" style={{ color: 'rgba(0, 65, 110, 0.6)' }}>
+                                    1 000 zł
                                 </div>
 
-                                {/* Slider - center, takes remaining space */}
-                                <div>
+                                {/* Slider - center */}
+                                <div className="flex-1">
                                     <Slider
                                         value={parseFloat(amount || '0')}
                                         onChange={(_, value) => {
@@ -240,9 +240,9 @@ function LandingStack() {
                                     />
                                 </div>
 
-                                {/* Max label - right side */}
-                                <div className="flex flex-col items-end" style={{ color: 'rgba(0, 65, 110, 0.6)', minWidth: '100px' }}>
-                                    <div className="text-lg font-semibold whitespace-nowrap">25 000 zł</div>
+                                {/* Max label - right */}
+                                <div className="text-lg font-semibold whitespace-nowrap" style={{ color: 'rgba(0, 65, 110, 0.6)' }}>
+                                    25 000 zł
                                 </div>
                             </div>
                         </div>
