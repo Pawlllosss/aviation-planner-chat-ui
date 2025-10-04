@@ -82,7 +82,7 @@ function Admin() {
                 'Wysokość zgromadzonych środków na koncie i Subkoncie': 'N/A (w przygotowaniu)',
                 'Emerytura rzeczywista': item.response.nominalPension.withoutSickLeave.toFixed(2),
                 'Emerytura urealniona': item.response.realPension.withoutSickLeave.toFixed(2),
-                'Kod pocztowy': 'N/A (w przygotowaniu)',
+                'Kod pocztowy': item.request.zipCode || 'Nie podano',
                 'Rok rozpoczęcia pracy': item.request.startYear,
                 'Rok przejścia na emeryturę': item.request.retirementYear
             }));

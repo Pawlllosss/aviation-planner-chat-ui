@@ -32,6 +32,7 @@ export interface PensionRequest {
   grossSalary: number;
   retirementYear: number;
   expectedPension: number;
+  zipCode?: string;
 }
 
 export interface PensionCalculationAuditing {
