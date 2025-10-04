@@ -10,7 +10,7 @@ import {
     Legend
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { TextField, InputAdornment } from '@mui/material';
+import { Slider } from '@mui/material';
 
 ChartJS.register(
     CategoryScale,
@@ -45,17 +45,14 @@ function LandingStack() {
     };
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            const value = parseFloat(amount);
-            if (value >= 100) {
-                setDebouncedAmount(value);
-                setShowFeedback(true);
-            } else {
-                setShowFeedback(false);
-            }
-        }, 500);
+        const value = parseFloat(amount);
+        if (value >= 100) {
+            setDebouncedAmount(value);
+            setShowFeedback(true);
+        } else {
+            setShowFeedback(false);
+        }
 
-        return () => clearTimeout(timer);
     }, [amount]);
 
     const isRealistic = debouncedAmount <= 4000;
@@ -140,103 +137,96 @@ function LandingStack() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white p-8">
+        <div className="min-h-screen flex items-center justify-center bg-white p-4">
             <div className="max-w-4xl w-full">
-                <div className="text-center mb-12">
-                    <h1 className="text-5xl font-bold mb-12" style={{ color: 'rgb(0, 65, 110)' }}>
+                <div className="text-center mb-6">
+                    <h1 className="text-4xl font-bold mb-6" style={{ color: 'rgb(0, 65, 110)' }}>
                         Czy stać Cię na spokojną przyszłość?
                     </h1>
 
-                    <p className="text-xl mb-8" style={{ color: 'rgb(0, 65, 110)' }}>
+                    <p className="text-lg mb-8" style={{ color: 'rgb(0, 65, 110)' }}>
                         Ile chcesz otrzymywać miesięcznie na emeryturze?
                     </p>
 
-                    <div className="flex justify-center items-center gap-3 mb-6">
-                        <TextField
-                            type="text"
-                            value={displayAmount}
-                            onChange={handleInputChange}
-                            placeholder="5 000"
-                            variant="outlined"
-                            slotProps={{
-                                input: {
-                                    endAdornment: <InputAdornment position="end" sx={{ fontSize: '1.5rem', color: 'rgb(0, 65, 110)' }}>zł</InputAdornment>,
-                                    sx: {
-                                        fontSize: '2.5rem',
-                                        fontWeight: 500,
-                                        color: 'rgb(0, 65, 110)',
-                                        textAlign: 'center',
-                                        '& input': {
-                                            textAlign: 'center',
-                                            padding: '16px 20px'
-                                        }
-                                    }
-                                }
-                            }}
-                            sx={{
-                                width: '320px',
-                                '& .MuiOutlinedInput-root': {
-                                    borderRadius: '12px',
-                                    backgroundColor: 'white',
-                                    '& fieldset': {
-                                        borderColor: showFeedback
-                                            ? isRealistic
-                                                ? 'rgb(0, 153, 63)'
-                                                : 'rgb(240, 94, 94)'
-                                            : 'rgba(190, 195, 206, 0.4)',
-                                        borderWidth: '1px'
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: showFeedback
-                                            ? isRealistic
-                                                ? 'rgb(0, 153, 63)'
-                                                : 'rgb(240, 94, 94)'
-                                            : 'rgba(190, 195, 206, 0.6)',
-                                    },
-                                    '&.Mui-focused fieldset': {
-                                        borderColor: showFeedback
-                                            ? isRealistic
-                                                ? 'rgb(0, 153, 63)'
-                                                : 'rgb(240, 94, 94)'
-                                            : 'rgb(63, 132, 210)',
-                                        borderWidth: '2px'
-                                    }
-                                }
-                            }}
-                        />
-                    </div>
+                    <div className="max-w-5xl mx-auto mb-8 px-12">
+                        {/* Display value */}
+                        <div className="text-center mb-8">
+                            <input
+                                type="text"
+                                value={displayAmount}
+                                onChange={handleInputChange}
+                                placeholder="0"
+                                className="text-4xl font-bold text-center outline-none bg-transparent border-0"
+                                style={{
+                                    color: showFeedback
+                                        ? isRealistic
+                                            ? 'rgb(0, 153, 63)'
+                                            : 'rgb(240, 94, 94)'
+                                        : 'rgb(0, 65, 110)',
+                                    width: 'auto',
+                                    minWidth: '200px',
+                                    letterSpacing: '-0.01em'
+                                }}
+                            />
+                        </div>
 
-                    <div className="max-w-lg mx-auto mb-8">
-                        <input
-                            type="range"
-                            min="1000"
-                            max="15000"
-                            step="100"
-                            value={amount || '5000'}
-                            onChange={(e) => {
-                                setAmount(e.target.value);
-                                setDisplayAmount(formatNumber(e.target.value));
-                            }}
-                            className="w-full h-2 rounded-lg appearance-none cursor-pointer"
-                            style={{
-                                background: `linear-gradient(to right, ${
-                                    showFeedback
-                                        ? isRealistic
-                                            ? 'rgb(0, 153, 63)'
-                                            : 'rgb(240, 94, 94)'
-                                        : 'rgb(63, 132, 210)'
-                                } 0%, ${
-                                    showFeedback
-                                        ? isRealistic
-                                            ? 'rgb(0, 153, 63)'
-                                            : 'rgb(240, 94, 94)'
-                                        : 'rgb(63, 132, 210)'
-                                } ${((parseFloat(amount || '5000') - 1000) / (15000 - 1000)) * 100}%, rgba(190, 195, 206, 0.2) ${((parseFloat(amount || '5000') - 1000) / (15000 - 1000)) * 100}%, rgba(190, 195, 206, 0.2) 100%)`
-                            }}
-                        />
-                        <div className="flex justify-between text-sm mt-2" style={{ color: 'rgba(0, 65, 110, 0.6)' }}>
-                            <span>1 000 zł</span>
-                            <span>15 000 zł</span>
+                        {/* Slider section */}
+                        <div className="relative">
+                            <div className="grid grid-cols-[auto_1fr_auto] items-center gap-8">
+                                {/* Min label - left side */}
+                                <div className="flex flex-col items-start" style={{ color: 'rgba(0, 65, 110, 0.6)', minWidth: '100px' }}>
+                                    <div className="text-lg font-semibold whitespace-nowrap">1 000 zł</div>
+                                </div>
+
+                                {/* Slider - center, takes remaining space */}
+                                <div>
+                                    <Slider
+                                        value={parseFloat(amount || '0')}
+                                        onChange={(_, value) => {
+                                            const newValue = value.toString();
+                                            setAmount(newValue);
+                                            setDisplayAmount(formatNumber(newValue));
+                                        }}
+                                        marks={[{ value: AVERAGE_PENSION, label: 'Średnia krajowa' }]}
+                                        valueLabelDisplay="auto"
+                                        min={1000}
+                                        max={15000}
+                                        step={100}
+                                        sx={{
+                                            color: showFeedback
+                                                ? isRealistic
+                                                    ? 'rgb(0, 153, 63)'
+                                                    : 'rgb(240, 94, 94)'
+                                                : 'rgb(63, 132, 210)',
+                                            height: 8,
+                                            '& .MuiSlider-track': {
+                                                border: 'none',
+                                                height: 8,
+                                            },
+                                            '& .MuiSlider-rail': {
+                                                backgroundColor: '#E8EAED',
+                                                opacity: 1,
+                                                height: 8,
+                                            },
+                                            '& .MuiSlider-thumb': {
+                                                height: 36,
+                                                width: 36,
+                                                backgroundColor: '#fff',
+                                                border: '4px solid currentColor',
+                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+                                                '&:hover, &:focus, &:active': {
+                                                    boxShadow: '0 3px 16px rgba(0, 0, 0, 0.25)',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Max label - right side */}
+                                <div className="flex flex-col items-end" style={{ color: 'rgba(0, 65, 110, 0.6)', minWidth: '100px' }}>
+                                    <div className="text-lg font-semibold whitespace-nowrap">15 000 zł</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -262,12 +252,12 @@ function LandingStack() {
                 </div>
 
                 {showFeedback && (
-                    <div className="mt-16 transition-opacity duration-500 opacity-100">
-                        <h2 className="text-2xl font-bold text-center mb-8" style={{ color: 'rgb(0, 65, 110)' }}>
+                    <div className="mt-8 transition-opacity duration-500 opacity-100">
+                        <h2 className="text-xl font-bold text-center mb-4" style={{ color: 'rgb(0, 65, 110)' }}>
                             Porównanie z rzeczywistością
                         </h2>
 
-                        <div className="px-8" style={{ height: '400px' }}>
+                        <div className="px-8" style={{ height: '300px' }}>
                             <Bar
                                 data={chartData}
                                 options={chartOptions}
