@@ -9,6 +9,7 @@ import {
     Tooltip,
     Legend
 } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import { TextField, InputAdornment } from '@mui/material';
 
 ChartJS.register(
@@ -17,15 +18,31 @@ ChartJS.register(
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    annotationPlugin
 );
 
 const AVERAGE_PENSION = 3500;
 
 function LandingStack() {
     const [amount, setAmount] = useState('');
+    const [displayAmount, setDisplayAmount] = useState('');
     const [debouncedAmount, setDebouncedAmount] = useState(0);
     const [showFeedback, setShowFeedback] = useState(false);
+
+    const formatNumber = (value: string) => {
+        const num = value.replace(/\s/g, '');
+        if (!num) return '';
+        return parseInt(num).toLocaleString('pl-PL');
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.replace(/\s/g, '');
+        if (value === '' || /^\d+$/.test(value)) {
+            setAmount(value);
+            setDisplayAmount(formatNumber(value));
+        }
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -67,6 +84,30 @@ function LandingStack() {
             tooltip: {
                 callbacks: {
                     label: (context: any) => `${context.parsed.y.toLocaleString('pl-PL')} zł`
+                }
+            },
+            annotation: {
+                annotations: {
+                    averageLine: {
+                        type: 'line' as const,
+                        yMin: AVERAGE_PENSION,
+                        yMax: AVERAGE_PENSION,
+                        borderColor: 'rgb(63, 132, 210)',
+                        borderWidth: 2,
+                        borderDash: [6, 6],
+                        label: {
+                            display: true,
+                            content: `Średnia: ${AVERAGE_PENSION.toLocaleString('pl-PL')} zł`,
+                            position: 'end',
+                            backgroundColor: 'rgb(63, 132, 210)',
+                            color: 'white',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            padding: 6
+                        }
+                    }
                 }
             }
         },
@@ -112,10 +153,10 @@ function LandingStack() {
 
                     <div className="flex justify-center items-center gap-3 mb-6">
                         <TextField
-                            type="number"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            placeholder="5000"
+                            type="text"
+                            value={displayAmount}
+                            onChange={handleInputChange}
+                            placeholder="5 000"
                             variant="outlined"
                             slotProps={{
                                 input: {
@@ -127,12 +168,7 @@ function LandingStack() {
                                         textAlign: 'center',
                                         '& input': {
                                             textAlign: 'center',
-                                            padding: '16px 20px',
-                                            MozAppearance: 'textfield'
-                                        },
-                                        '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
-                                            WebkitAppearance: 'none',
-                                            margin: 0
+                                            padding: '16px 20px'
                                         }
                                     }
                                 }
@@ -170,20 +206,56 @@ function LandingStack() {
                         />
                     </div>
 
+                    <div className="max-w-lg mx-auto mb-8">
+                        <input
+                            type="range"
+                            min="1000"
+                            max="15000"
+                            step="100"
+                            value={amount || '5000'}
+                            onChange={(e) => {
+                                setAmount(e.target.value);
+                                setDisplayAmount(formatNumber(e.target.value));
+                            }}
+                            className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                            style={{
+                                background: `linear-gradient(to right, ${
+                                    showFeedback
+                                        ? isRealistic
+                                            ? 'rgb(0, 153, 63)'
+                                            : 'rgb(240, 94, 94)'
+                                        : 'rgb(63, 132, 210)'
+                                } 0%, ${
+                                    showFeedback
+                                        ? isRealistic
+                                            ? 'rgb(0, 153, 63)'
+                                            : 'rgb(240, 94, 94)'
+                                        : 'rgb(63, 132, 210)'
+                                } ${((parseFloat(amount || '5000') - 1000) / (15000 - 1000)) * 100}%, rgba(190, 195, 206, 0.2) ${((parseFloat(amount || '5000') - 1000) / (15000 - 1000)) * 100}%, rgba(190, 195, 206, 0.2) 100%)`
+                            }}
+                        />
+                        <div className="flex justify-between text-sm mt-2" style={{ color: 'rgba(0, 65, 110, 0.6)' }}>
+                            <span>1 000 zł</span>
+                            <span>15 000 zł</span>
+                        </div>
+                    </div>
+
                     {showFeedback && (
-                        <div className="mt-8 flex justify-center">
-                            <div
-                                className="inline-flex items-center gap-3 transition-all duration-500 opacity-100"
-                                style={{
-                                    color: isRealistic ? 'rgb(0, 153, 63)' : 'rgb(240, 94, 94)'
-                                }}
-                            >
-                                <span className="text-2xl">
-                                    {isRealistic ? '💚' : '🔥'}
-                                </span>
-                                <span className="text-lg font-medium">
-                                    {isRealistic ? 'Możliwe do osiągnięcia!' : `Średnia to ${AVERAGE_PENSION.toLocaleString('pl-PL')} zł`}
-                                </span>
+                        <div className="mt-8">
+                            <div className="text-center">
+                                <div
+                                    className="inline-flex items-center gap-2 text-lg font-medium"
+                                    style={{
+                                        color: isRealistic ? 'rgb(0, 153, 63)' : 'rgb(240, 94, 94)'
+                                    }}
+                                >
+                                    <span className="text-2xl">
+                                        {isRealistic ? '💚' : '🔥'}
+                                    </span>
+                                    <span>
+                                        {isRealistic ? 'Możliwe do osiągnięcia!' : 'Średnia to 3 500 zł'}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -196,7 +268,12 @@ function LandingStack() {
                         </h2>
 
                         <div className="px-8" style={{ height: '400px' }}>
-                            <Bar data={chartData} options={chartOptions} />
+                            <Bar
+                                data={chartData}
+                                options={chartOptions}
+                                aria-label="Wykres porównawczy Twojej oczekiwanej emerytury ze średnią emeryturą ZUS"
+                                role="img"
+                            />
                         </div>
 
                         {difference !== 0 && (
