@@ -98,3 +98,14 @@ fetch('/api/demos')  // Proxied to https://hackyeah2025be.oczadly.com/demos in d
 ```
 
 **Note:** The proxy only works in development (`npm run dev`). For production builds, you'll need to configure the API URL appropriately or use a runtime proxy/reverse proxy.
+
+
+All components should fulfill WCAG 2.0
+Colours should be compliant with "Księgą Znaku ZUS" or similar 
+1. R: 255; G:179; B:79
+2. R: 0; G: 153; B: 63
+3. R: 190; G: 195; B: 206
+4. R: 63; G: 132; B: 210
+5. R: 0: G: 65; B: 110
+6. R: 240; G: 94; B: 94
+7. R: 0; G: 0; B: 0 
