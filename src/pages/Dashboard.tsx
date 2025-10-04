@@ -30,6 +30,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const data: PensionResponse | null = location.state?.data || null;
   const expectedPension: number = location.state?.expectedPension || 0;
+  const retirementYear: number = location.state?.retirementYear || 2060;
 
   if (!data) {
     navigate('/calculator');
@@ -186,10 +187,17 @@ const Dashboard = () => {
                 </span>
               </div>
 
-              <div className="flex justify-between items-center py-3">
+              <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
                 <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Porównanie do średniej emerytury:</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(63, 132, 210)' }}>
                   {formatNumber(nominalPension.vsAveragePension)}%
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center py-3">
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Średnia prognozowana emerytura w {retirementYear}:</span>
+                <span className="text-2xl font-bold" style={{ color: 'rgb(0, 153, 63)' }}>
+                  {formatNumber(nominalPension.finalAveragePension)} zł
                 </span>
               </div>
 
@@ -234,10 +242,17 @@ const Dashboard = () => {
                 </span>
               </div>
 
-              <div className="flex justify-between items-center py-3">
+              <div className="flex justify-between items-center py-3 border-b-2" style={{ borderColor: 'rgb(190, 195, 206)' }}>
                 <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Porównanie do średniej emerytury:</span>
                 <span className="text-2xl font-bold" style={{ color: 'rgb(0, 153, 63)' }}>
                   {formatNumber(realPension.vsAveragePension)}%
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center py-3">
+                <span className="text-lg font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Średnia prognozowana emerytura w {retirementYear}:</span>
+                <span className="text-2xl font-bold" style={{ color: 'rgb(63, 132, 210)' }}>
+                  {formatNumber(realPension.finalAveragePension)} zł
                 </span>
               </div>
 

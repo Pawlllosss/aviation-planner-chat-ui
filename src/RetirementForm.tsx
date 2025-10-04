@@ -57,7 +57,7 @@ const RetirementForm = () => {
       console.log('Response:', response);
 
       // Navigate to dashboard with response data and expected pension
-      navigate('/dashboard', { state: { data: response, expectedPension: data.expectedPension } });
+      navigate('/dashboard', { state: { data: response, expectedPension: data.expectedPension, retirementYear: data.retirementYear } });
     } catch (error) {
       console.error('Error submitting form:', error);
     }

@@ -9,6 +9,7 @@ export interface PensionDetails {
   withoutSickLeave: number;
   replacementRate: number;
   vsAveragePension: number;
+  finalAveragePension: number;
   delayedScenarios: DelayedScenario[];
   salaryNeededForExpected: number | null;
 }
