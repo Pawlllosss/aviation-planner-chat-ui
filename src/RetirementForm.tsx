@@ -1,31 +1,22 @@
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-
-interface JobEntry {
-  salary: string;
-  year: string;
-}
+import axios from "axios";
 
 interface FormData {
-  age: string;
+  age: number;
   gender: 'male' | 'female';
-  retirementYear: string;
-  jobEntries: JobEntry[];
+  retirementYear: number;
+  currentSalary: number;
 }
 
 const RetirementForm = () => {
-  const { register, handleSubmit, watch, setValue, control, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormData>({
     defaultValues: {
-      age: '35',
+      age: 35,
       gender: 'male',
-      retirementYear: '2060',
-      jobEntries: [{ salary: '5747', year: '2021' }]
+      retirementYear: 2060,
+      currentSalary: 5050
     }
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'jobEntries'
   });
 
   const age = watch('age');
@@ -47,8 +38,14 @@ const RetirementForm = () => {
     setValue('retirementYear', calculatedYear);
   }, [age, gender, setValue]);
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
+  const onSubmit = async (data: FormData) => {
+    try {
+        console.log(data)
+      const response = await axios.post<FormData>("/api/demos", data);
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   return (
@@ -68,7 +65,7 @@ const RetirementForm = () => {
             </label>
             <input
               type="number"
-              {...register('age', { required: 'Wiek jest wymagany' })}
+              {...register('age', { required: 'Wiek jest wymagany', valueAsNumber: true })}
               className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
               style={{ borderColor: age ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
             />
@@ -111,12 +108,26 @@ const RetirementForm = () => {
             </label>
             <input
               type="number"
-              {...register('retirementYear', { required: 'Rok przejścia na emeryturę jest wymagany' })}
+              {...register('retirementYear', { required: 'Rok przejścia na emeryturę jest wymagany', valueAsNumber: true })}
               placeholder="2050"
               className="text-5xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
               style={{ borderColor: watch('retirementYear') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
             />
             {errors.retirementYear && <p className="text-red-500 mt-2">{errors.retirementYear.message}</p>}
+          </div>
+
+          {/* Current Salary */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
+              Obecne zarobki miesięczne
+            </label>
+            <input
+              type="number"
+              {...register('currentSalary', { required: 'Obecne zarobki są wymagane', valueAsNumber: true })}
+              className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
+              style={{ borderColor: watch('currentSalary') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
+            />
+            {errors.currentSalary && <p className="text-red-500 mt-2">{errors.currentSalary.message}</p>}
           </div>
 
           {/*/!* Job Entries Section *!/*/}
