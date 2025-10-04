@@ -1,6 +1,7 @@
 import {useEffect} from 'react'
 import './App.css'
 import {createChat} from "@n8n/chat";
+import DemosExample from './DemosExample';
 
 function App() {
     console.log(import.meta.env.VITE_N8N_WEBHOOK_URL);
@@ -23,6 +24,7 @@ function App() {
     }, []);
 
     return (<div>
+        <DemosExample />
         <div id='n8n-chat'>
 
         </div>
