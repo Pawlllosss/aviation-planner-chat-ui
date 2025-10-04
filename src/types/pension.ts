@@ -24,3 +24,18 @@ export interface PensionResponse {
   realPension: PensionDetails;
   accountProgression: AccountProgression[];
 }
+
+export interface PensionRequest {
+  age: number;
+  sex: 'M' | 'F';
+  startYear: number;
+  grossSalary: number;
+  retirementYear: number;
+  expectedPension: number;
+}
+
+export interface PensionCalculationAuditing {
+  calculatedAt: string;
+  request: PensionRequest;
+  response: PensionResponse;
+}
