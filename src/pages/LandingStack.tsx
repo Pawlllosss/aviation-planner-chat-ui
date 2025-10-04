@@ -102,7 +102,7 @@ function LandingStack() {
             <div className="max-w-4xl w-full">
                 <div className="text-center mb-12">
                     <h1 className="text-5xl font-bold mb-6" style={{ color: 'rgb(0, 65, 110)' }}>
-                        Ile chcesz dostawać na emeryturze?
+                        Czy stać Cię na spokojną przyszłość?
                     </h1>
                     <div className="relative inline-block">
                         <input
