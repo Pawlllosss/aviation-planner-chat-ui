@@ -18,16 +18,20 @@ interface FormData {
 const RetirementForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const desiredAmount = location.state?.desiredAmount || 0;
+
+  // Support both desiredAmount (from slider) and chatbot data
+  const chatbotData = location.state || {};
+  const desiredAmount = chatbotData.desiredAmount || chatbotData.expectedPension || 0;
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormData>({
     defaultValues: {
-      age: 35,
-      sex: 'M',
-      grossSalary: 5050,
-      startYear: 2025,
-      retirementYear: 2060,
-      expectedPension: desiredAmount
+      age: chatbotData.age || 35,
+      sex: chatbotData.sex || 'M',
+      grossSalary: chatbotData.grossSalary || 5050,
+      startYear: chatbotData.startYear || 2025,
+      retirementYear: chatbotData.retirementYear || 2060,
+      expectedPension: desiredAmount,
+      zipCode: chatbotData.zipCode || ''
     }
   });
 

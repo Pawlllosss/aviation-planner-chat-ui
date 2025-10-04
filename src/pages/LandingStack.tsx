@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
+import ChatModal from '../components/ChatModal';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -33,8 +34,10 @@ function LandingStack() {
     const [amount, setAmount] = useState(expectedPension > 0 ? expectedPension.toString() : '');
     const [displayAmount, setDisplayAmount] = useState(expectedPension > 0 ? expectedPension.toLocaleString('pl-PL') : '');
     const [debouncedAmount, setDebouncedAmount] = useState(expectedPension || 0);
-    const [showFeedback, setShowFeedback] = useState(expectedPension > 0);
+    const [showFeedback, setShowFeedback] = useState(false);
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
+    const openAIKey = import.meta.env.VITE_OPENAI_API_KEY;
     const formatNumber = (value: string) => {
         const num = value.replace(/\s/g, '');
         if (!num) return '';
@@ -288,7 +291,7 @@ function LandingStack() {
                             Różnica: <span className="font-bold">{difference > 0 ? '+' : ''}{difference.toLocaleString('pl-PL')} zł</span>
                         </div>
 
-                        <div className="flex justify-center mt-12">
+                        <div className="flex justify-center gap-4 mt-12">
                             <button
                                 onClick={() => navigate('/calculator', { state: { desiredAmount: debouncedAmount } })}
                                 className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
@@ -299,11 +302,30 @@ function LandingStack() {
                             >
                                 Zaplanuj swoją emeryturę
                             </button>
+                            <button
+                                onClick={() => setIsChatOpen(true)}
+                                className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                                style={{
+                                    backgroundColor: 'rgb(63, 132, 210)',
+                                    color: 'white'
+                                }}
+                                title="Otwórz czat z asystentem"
+                            >
+                                💬 Czat z asystentem
+                            </button>
                         </div>
                     </div>
                 )}
 
             </div>
+
+            {/* Chat Modal */}
+            <ChatModal
+                isOpen={isChatOpen}
+                onClose={() => setIsChatOpen(false)}
+                openAIKey={openAIKey}
+                desiredAmount={debouncedAmount}
+            />
         </div>
     );
 }
