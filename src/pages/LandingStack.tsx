@@ -9,6 +9,7 @@ import {
     Tooltip,
     Legend
 } from 'chart.js';
+import { TextField, InputAdornment } from '@mui/material';
 
 ChartJS.register(
     CategoryScale,
@@ -101,37 +102,89 @@ function LandingStack() {
         <div className="min-h-screen flex items-center justify-center bg-white p-8">
             <div className="max-w-4xl w-full">
                 <div className="text-center mb-12">
-                    <h1 className="text-5xl font-bold mb-6" style={{ color: 'rgb(0, 65, 110)' }}>
+                    <h1 className="text-5xl font-bold mb-12" style={{ color: 'rgb(0, 65, 110)' }}>
                         Czy stać Cię na spokojną przyszłość?
                     </h1>
-                    <div className="relative inline-block">
-                        <input
+
+                    <p className="text-xl mb-8" style={{ color: 'rgb(0, 65, 110)' }}>
+                        Ile chcesz otrzymywać miesięcznie na emeryturze?
+                    </p>
+
+                    <div className="flex justify-center items-center gap-3 mb-6">
+                        <TextField
                             type="number"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            placeholder="0"
-                            className="text-6xl font-bold text-center border-b-4 outline-none bg-transparent w-80 px-4 py-2 transition-colors"
-                            style={{
-                                borderColor: showFeedback
-                                    ? isRealistic
-                                        ? 'rgb(0, 153, 63)'
-                                        : 'rgb(240, 94, 94)'
-                                    : 'rgb(190, 195, 206)'
+                            placeholder="5000"
+                            variant="outlined"
+                            slotProps={{
+                                input: {
+                                    endAdornment: <InputAdornment position="end" sx={{ fontSize: '1.5rem', color: 'rgb(0, 65, 110)' }}>zł</InputAdornment>,
+                                    sx: {
+                                        fontSize: '2.5rem',
+                                        fontWeight: 500,
+                                        color: 'rgb(0, 65, 110)',
+                                        textAlign: 'center',
+                                        '& input': {
+                                            textAlign: 'center',
+                                            padding: '16px 20px',
+                                            MozAppearance: 'textfield'
+                                        },
+                                        '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
+                                            WebkitAppearance: 'none',
+                                            margin: 0
+                                        }
+                                    }
+                                }
+                            }}
+                            sx={{
+                                width: '320px',
+                                '& .MuiOutlinedInput-root': {
+                                    borderRadius: '12px',
+                                    backgroundColor: 'white',
+                                    '& fieldset': {
+                                        borderColor: showFeedback
+                                            ? isRealistic
+                                                ? 'rgb(0, 153, 63)'
+                                                : 'rgb(240, 94, 94)'
+                                            : 'rgba(190, 195, 206, 0.4)',
+                                        borderWidth: '1px'
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: showFeedback
+                                            ? isRealistic
+                                                ? 'rgb(0, 153, 63)'
+                                                : 'rgb(240, 94, 94)'
+                                            : 'rgba(190, 195, 206, 0.6)',
+                                    },
+                                    '&.Mui-focused fieldset': {
+                                        borderColor: showFeedback
+                                            ? isRealistic
+                                                ? 'rgb(0, 153, 63)'
+                                                : 'rgb(240, 94, 94)'
+                                            : 'rgb(63, 132, 210)',
+                                        borderWidth: '2px'
+                                    }
+                                }
                             }}
                         />
-                        <span className="text-4xl ml-4" style={{ color: 'rgb(0, 65, 110)' }}>
-                            zł/mies.
-                        </span>
                     </div>
 
                     {showFeedback && (
-                        <div
-                            className="mt-6 text-2xl font-semibold transition-opacity duration-500 opacity-100"
-                            style={{
-                                color: isRealistic ? 'rgb(0, 153, 63)' : 'rgb(240, 94, 94)'
-                            }}
-                        >
-                            {isRealistic ? '💚 Możliwe do osiągnięcia!' : `🔥 Średnia to ${AVERAGE_PENSION} zł`}
+                        <div className="mt-8 flex justify-center">
+                            <div
+                                className="inline-flex items-center gap-3 transition-all duration-500 opacity-100"
+                                style={{
+                                    color: isRealistic ? 'rgb(0, 153, 63)' : 'rgb(240, 94, 94)'
+                                }}
+                            >
+                                <span className="text-2xl">
+                                    {isRealistic ? '💚' : '🔥'}
+                                </span>
+                                <span className="text-lg font-medium">
+                                    {isRealistic ? 'Możliwe do osiągnięcia!' : `Średnia to ${AVERAGE_PENSION.toLocaleString('pl-PL')} zł`}
+                                </span>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -154,15 +207,6 @@ function LandingStack() {
                     </div>
                 )}
 
-                <div className="text-center mt-16">
-                    <button
-                        className="text-2xl font-bold px-12 py-4 rounded-lg text-white transition-transform hover:scale-105"
-                        style={{ backgroundColor: 'rgb(0, 153, 63)' }}
-                    >
-                        Policz swoją prawdziwą emeryturę
-                    </button>
-                    <p className="mt-4 text-gray-600">Zajmie 2 minuty</p>
-                </div>
             </div>
         </div>
     );

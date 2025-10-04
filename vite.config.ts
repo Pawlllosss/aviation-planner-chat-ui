@@ -14,7 +14,7 @@ export default defineConfig({
         strictPort: true,
         host: true,
         origin: "http://0.0.0.0:8080",
-        allowedHosts: true,
+        allowedHosts: true, // only for development
         proxy: {
             '/api': {
                 target: 'https://hackyeah2025be.oczadly.com',
