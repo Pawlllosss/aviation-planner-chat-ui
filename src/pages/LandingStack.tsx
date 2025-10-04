@@ -142,7 +142,7 @@ function LandingStack() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white p-4">
+        <div className="h-screen flex items-center justify-center bg-white p-4 overflow-hidden">
             <div className="max-w-4xl w-full">
                 <div className="text-center mb-6">
                     <h1 className="text-4xl font-bold mb-6" style={{ color: 'rgb(0, 65, 110)' }}>
@@ -195,7 +195,7 @@ function LandingStack() {
                                         marks={[{ value: AVERAGE_PENSION, label: 'Średnia krajowa' }]}
                                         valueLabelDisplay="auto"
                                         min={1000}
-                                        max={15000}
+                                        max={25000}
                                         step={100}
                                         sx={{
                                             color: showFeedback
@@ -242,7 +242,7 @@ function LandingStack() {
 
                                 {/* Max label - right side */}
                                 <div className="flex flex-col items-end" style={{ color: 'rgba(0, 65, 110, 0.6)', minWidth: '100px' }}>
-                                    <div className="text-lg font-semibold whitespace-nowrap">15 000 zł</div>
+                                    <div className="text-lg font-semibold whitespace-nowrap">25 000 zł</div>
                                 </div>
                             </div>
                         </div>

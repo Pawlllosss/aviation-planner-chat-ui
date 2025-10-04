@@ -49,7 +49,7 @@ const RetirementForm = () => {
   const onSubmit = async (data: FormData) => {
     try {
         console.log(data)
-      const response = await api.post<PensionResponse>("/api/pension/calculate", data);
+      const response = await api.post<PensionResponse>("/pension/calculate", data);
       console.log('Response:', response);
 
       // Navigate to dashboard with response data and expected pension
@@ -60,7 +60,7 @@ const RetirementForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-8" style={{ animation: 'fadeIn 0.5s ease-out' }}>
+    <div className="h-screen flex items-center justify-center bg-white overflow-hidden" style={{ animation: 'fadeIn 0.5s ease-out' }}>
       {/* Back Button - Top Left */}
       <button
         type="button"
@@ -85,7 +85,7 @@ const RetirementForm = () => {
         <ArrowBackIcon sx={{ fontSize: 32 }} />
       </button>
 
-      <div className="max-w-4xl w-full" style={{ animation: 'slideInFromRight 0.6s ease-out' }}>
+      <div className="max-w-4xl w-full h-full overflow-y-auto px-8 py-8" style={{ animation: 'slideInFromRight 0.6s ease-out' }}>
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
             Oblicz swoją przyszłą emeryturę
