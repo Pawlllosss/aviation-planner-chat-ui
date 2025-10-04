@@ -59,53 +59,53 @@ const RetirementForm = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white p-8" style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div className="max-w-4xl w-full" style={{ animation: 'slideInFromRight 0.6s ease-out' }}>
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h1 className="text-5xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
             Oblicz swoją przyszłą emeryturę
           </h1>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-16">
-          {/* Desired Pension */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          {/* Desired Pension - Display Only */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
               Oczekiwana emerytura miesięczna
             </label>
-            <input
-              type="number"
-              {...register('expectedPension', { required: 'Oczekiwana emerytura jest wymagana', valueAsNumber: true })}
-              className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
-              style={{ borderColor: watch('expectedPension') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
-            />
-            {errors.expectedPension && <p className="text-red-500 mt-2">{errors.expectedPension.message}</p>}
+            <div className="text-4xl font-bold text-center py-4" style={{ color: 'rgb(0, 153, 63)' }}>
+              {desiredAmount > 0 ? desiredAmount.toLocaleString('pl-PL') : '0'}
+            </div>
           </div>
 
-          {/* Age Section */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
-              Twój wiek
-            </label>
-            <input
-              type="number"
-              {...register('age', { required: 'Wiek jest wymagany', valueAsNumber: true })}
-              className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
-              style={{ borderColor: age ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
-            />
-            {errors.age && <p className="text-red-500 mt-2">{errors.age.message}</p>}
-          </div>
-
-          {/* Start Work Year Section */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
-              Rok rozpoczęcia pracy
-            </label>
-            <input
+          {/* Age and Retirement Year in one row */}
+          <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            {/* Age Section */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '1', minWidth: '200px', maxWidth: '300px' }}>
+              <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.25rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60px', textAlign: 'center' }}>
+                Twój wiek
+              </label>
+              <input
                 type="number"
-                {...register('startYear', { required: 'Rok rozpoczecia pracy jest wymagany', valueAsNumber: true })}
-                className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
-                style={{ borderColor: watch('startYear') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
-            />
-            {errors.startYear && <p className="text-red-500 mt-2">{errors.startYear.message}</p>}
+                {...register('age', { required: 'Wiek jest wymagany', valueAsNumber: true })}
+                className="text-3xl font-bold text-center border-b-4 outline-none bg-transparent w-full py-3 transition-colors"
+                style={{ borderColor: age ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
+              />
+              {errors.age && <p className="text-red-500 mt-2 text-sm">{errors.age.message}</p>}
+            </div>
+
+            {/* Retirement Year */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '1', minWidth: '200px', maxWidth: '300px' }}>
+              <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.25rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60px', textAlign: 'center' }}>
+                Planowany rok przejścia na emeryturę
+              </label>
+              <input
+                type="number"
+                {...register('retirementYear', { required: 'Rok przejścia na emeryturę jest wymagany', valueAsNumber: true })}
+                placeholder="2050"
+                className="text-3xl font-bold text-center border-b-4 outline-none bg-transparent w-full py-3 transition-colors"
+                style={{ borderColor: watch('retirementYear') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
+              />
+              {errors.retirementYear && <p className="text-red-500 mt-2 text-sm">{errors.retirementYear.message}</p>}
+            </div>
           </div>
 
           {/* Gender Section */}
@@ -137,33 +137,32 @@ const RetirementForm = () => {
             </div>
           </div>
 
-          {/* Retirement Year */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
-              Planowany rok przejścia na emeryturę
-            </label>
-            <input
-              type="number"
-              {...register('retirementYear', { required: 'Rok przejścia na emeryturę jest wymagany', valueAsNumber: true })}
-              placeholder="2050"
-              className="text-5xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
-              style={{ borderColor: watch('retirementYear') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
-            />
-            {errors.retirementYear && <p className="text-red-500 mt-2">{errors.retirementYear.message}</p>}
-          </div>
-
           {/* Current Salary */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
               Obecne zarobki miesięczne
             </label>
             <input
-              type="number"
-              {...register('grossSalary', { required: 'Obecne zarobki są wymagane', valueAsNumber: true })}
-              className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
-              style={{ borderColor: watch('grossSalary') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
+                type="number"
+                {...register('grossSalary', { required: 'Obecne zarobki są wymagane', valueAsNumber: true })}
+                className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
+                style={{ borderColor: watch('grossSalary') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
             />
             {errors.grossSalary && <p className="text-red-500 mt-2">{errors.grossSalary.message}</p>}
+          </div>
+
+          {/* Start Work Year Section */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.5rem', marginBottom: '0.5rem', display: 'block' }}>
+              Rok rozpoczęcia pracy
+            </label>
+            <input
+              type="number"
+              {...register('startYear', { required: 'Rok rozpoczecia pracy jest wymagany', valueAsNumber: true })}
+              className="text-4xl font-bold text-center border-b-4 outline-none bg-transparent w-80 py-4 transition-colors"
+              style={{ borderColor: watch('startYear') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
+            />
+            {errors.startYear && <p className="text-red-500 mt-2">{errors.startYear.message}</p>}
           </div>
 
           {/*/!* Job Entries Section *!/*/}
@@ -270,7 +269,6 @@ const RetirementForm = () => {
             >
               Oblicz emeryturę
             </button>
-            <p className="mt-6 text-gray-600 text-lg">To zajmie tylko chwilę</p>
           </div>
         </form>
       </div>
