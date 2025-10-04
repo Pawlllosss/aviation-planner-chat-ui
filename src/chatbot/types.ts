@@ -8,4 +8,6 @@ export interface RetirementFormData {
   expectedPension?: number;
   zipCode?: string;
   currentStep?: string;
+  includeSickLeave?: boolean;
+  avgSickDaysPerYear?: number;
 }

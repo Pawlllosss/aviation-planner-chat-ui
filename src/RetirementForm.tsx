@@ -13,6 +13,8 @@ interface FormData {
   retirementYear: number;
   expectedPension: number;
   zipCode?: string;
+  includeSickLeave?: boolean;
+  avgSickDaysPerYear?: number;
 }
 
 const RetirementForm = () => {
@@ -30,7 +32,9 @@ const RetirementForm = () => {
       startYear: stateData.startYear || 2025,
       retirementYear: stateData.retirementYear || 2060,
       expectedPension: expectedPension,
-      zipCode: stateData.zipCode || ''
+      zipCode: stateData.zipCode || '',
+      includeSickLeave: stateData.includeSickLeave || false,
+      avgSickDaysPerYear: stateData.avgSickDaysPerYear || 14
     }
   });
 
@@ -194,6 +198,48 @@ const RetirementForm = () => {
               style={{ borderColor: watch('startYear') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)' }}
             />
             {errors.startYear && <p className="text-red-500 mt-1">{errors.startYear.message}</p>}
+          </div>
+
+          {/* Sick Days Section */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.25rem', marginBottom: '0.5rem', display: 'block' }}>
+              Chorobowe
+            </label>
+
+            <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap', width: '100%', alignItems: 'center' }}>
+              {/* Checkbox */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '1', minWidth: '200px', maxWidth: '300px' }}>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    {...register('includeSickLeave')}
+                    className="w-6 h-6 mr-3"
+                    style={{ accentColor: 'rgb(63, 132, 210)' }}
+                  />
+                  <span style={{ color: 'rgb(0, 65, 110)', fontWeight: '600', fontSize: '1.125rem' }}>
+                    Uwzględnij dni chorobowe
+                  </span>
+                </label>
+              </div>
+
+              {/* Number Input */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '1', minWidth: '200px', maxWidth: '300px' }}>
+                <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.125rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '50px', textAlign: 'center' }}>
+                  Średnia liczba dni chorobowych rocznie
+                </label>
+                <input
+                  type="number"
+                  {...register('avgSickDaysPerYear', { valueAsNumber: true, min: 0, max: 365 })}
+                  disabled={!watch('includeSickLeave')}
+                  className="text-2xl font-bold text-center border-b-4 outline-none bg-transparent w-full py-2 transition-colors"
+                  style={{
+                    borderColor: watch('avgSickDaysPerYear') && watch('includeSickLeave') ? 'rgb(0, 153, 63)' : 'rgb(190, 195, 206)',
+                    opacity: watch('includeSickLeave') ? 1 : 0.5
+                  }}
+                />
+                {errors.avgSickDaysPerYear && <p className="text-red-500 mt-1 text-sm">{errors.avgSickDaysPerYear.message}</p>}
+              </div>
+            </div>
           </div>
 
           {/* Zip Code Section */}

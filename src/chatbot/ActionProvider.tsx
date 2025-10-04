@@ -113,6 +113,20 @@ class ActionProvider {
         const currentYear = new Date().getFullYear();
         if (year && year >= 1950 && year <= currentYear) {
           formData.startYear = year;
+          formData.currentStep = 'includeSickLeave';
+          return `W ${year} roku rozpocząłeś/rozpoczęłaś pracę. Czy chcesz uwzględnić dni chorobowe w obliczeniach? (tak/nie)`;
+        }
+        return 'Proszę podać poprawny rok (1950-' + currentYear + ').';
+      }
+
+      case 'includeSickLeave': {
+        if (lowerMessage.includes('tak') || lowerMessage.includes('yes') || lowerMessage.includes('chc')) {
+          formData.includeSickLeave = true;
+          formData.currentStep = 'avgSickDaysPerYear';
+          return 'Rozumiem. Ile średnio dni chorobowych rocznie? (podaj liczbę)';
+        } else if (lowerMessage.includes('nie') || lowerMessage.includes('no') || lowerMessage.includes('pomiń')) {
+          formData.includeSickLeave = false;
+          formData.avgSickDaysPerYear = 0;
           formData.currentStep = 'retirementYear';
 
           const age = formData.age || 35;
@@ -121,9 +135,27 @@ class ActionProvider {
           const retirementAge = sex === 'M' ? 65 : 60;
           const defaultRetirement = birthYear + retirementAge;
 
-          return `W ${year} roku rozpocząłeś/rozpoczęłaś pracę. W którym roku planujesz przejść na emeryturę? (sugerowany rok: ${defaultRetirement})`;
+          return `Rozumiem, pomijamy dni chorobowe. W którym roku planujesz przejść na emeryturę? (sugerowany rok: ${defaultRetirement})`;
         }
-        return 'Proszę podać poprawny rok (1950-' + currentYear + ').';
+        return 'Proszę odpowiedzieć: tak lub nie.';
+      }
+
+      case 'avgSickDaysPerYear': {
+        const days = this.extractNumber(message);
+        if (days !== null && days >= 0 && days <= 365) {
+          formData.avgSickDaysPerYear = days;
+          formData.currentStep = 'retirementYear';
+
+          const age = formData.age || 35;
+          const sex = formData.sex || 'M';
+          const currentYear = new Date().getFullYear();
+          const birthYear = currentYear - age;
+          const retirementAge = sex === 'M' ? 65 : 60;
+          const defaultRetirement = birthYear + retirementAge;
+
+          return `${days} dni rocznie - zapisane. W którym roku planujesz przejść na emeryturę? (sugerowany rok: ${defaultRetirement})`;
+        }
+        return 'Proszę podać poprawną liczbę dni (0-365).';
       }
 
       case 'retirementYear': {
@@ -231,7 +263,11 @@ class ActionProvider {
       case 'grossSalary':
         return `${basePrompt} Użytkownik podał zarobki (${formData.grossSalary} zł). Możesz zareagować (np. "Niezłe!" dla wysokiej kwoty lub po prostu "Okej"). Zapytaj w którym roku zaczął/zaczęła pracować, np. "W którym roku zacząłeś/zaczęłaś pracę?" lub "Od którego roku pracujesz?".`;
       case 'startYear':
-        return `${basePrompt} Użytkownik podał rok rozpoczęcia pracy (${formData.startYear}). Możesz skomentować (np. "Sporo doświadczenia!" jeśli dawno, albo "Całkiem niedawno" jeśli ostatnio). Zapytaj naturalnie o planowany rok emerytury, np. "A kiedy planujesz przejść na emeryturę? Jaki rok masz w głowie?" Możesz podpowiedzieć wiek emerytalny (M: 65, K: 60).`;
+        return `${basePrompt} Użytkownik podał rok rozpoczęcia pracy (${formData.startYear}). Możesz skomentować (np. "Sporo doświadczenia!" jeśli dawno, albo "Całkiem niedawno" jeśli ostatnio). Zapytaj naturalnie czy chce uwzględnić dni chorobowe, np. "Chcesz uwzględnić dni chorobowe w obliczeniach?" lub "Dodamy też dni chorobowe? (tak/nie)".`;
+      case 'includeSickLeave':
+        return `${basePrompt} Użytkownik odpowiedział na pytanie o uwzględnienie dni chorobowych. Jeśli odpowiedział "tak", zapytaj ile średnio dni chorobowych rocznie, np. "Ile średnio dni chorobowych rocznie?". Jeśli "nie", przejdź do pytania o rok emerytury.`;
+      case 'avgSickDaysPerYear':
+        return `${basePrompt} Użytkownik podał liczbę dni chorobowych (${formData.avgSickDaysPerYear}). Potwierdź krótko i zapytaj naturalnie o planowany rok emerytury, np. "A kiedy planujesz przejść na emeryturę? Jaki rok masz w głowie?" Możesz podpowiedzieć wiek emerytalny (M: 65, K: 60).`;
       case 'retirementYear':
         return `${basePrompt} Użytkownik podał rok przejścia na emeryturę (${formData.retirementYear}). Zareaguj naturalnie na to ile lat zostało (np. "To już za kilka lat!" lub "Jeszcze trochę czasu"). Zapytaj o kod pocztowy w swobodny sposób, np. "Podaj jeszcze kod pocztowy (jeśli chcesz), żeby dokładniej obliczyć". Daj wyraźnie znać, że można pominąć.`;
       case 'zipCode':
@@ -279,6 +315,27 @@ class ActionProvider {
         const currentYear = new Date().getFullYear();
         if (year && year >= 1950 && year <= currentYear) {
           formData.startYear = year;
+          formData.currentStep = 'includeSickLeave';
+        }
+        break;
+      }
+
+      case 'includeSickLeave': {
+        if (lowerMessage.includes('tak') || lowerMessage.includes('yes') || lowerMessage.includes('chc')) {
+          formData.includeSickLeave = true;
+          formData.currentStep = 'avgSickDaysPerYear';
+        } else if (lowerMessage.includes('nie') || lowerMessage.includes('no') || lowerMessage.includes('pomiń')) {
+          formData.includeSickLeave = false;
+          formData.avgSickDaysPerYear = 0;
+          formData.currentStep = 'retirementYear';
+        }
+        break;
+      }
+
+      case 'avgSickDaysPerYear': {
+        const days = this.extractNumber(message);
+        if (days !== null && days >= 0 && days <= 365) {
+          formData.avgSickDaysPerYear = days;
           formData.currentStep = 'retirementYear';
         }
         break;
