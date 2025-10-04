@@ -4,6 +4,7 @@ import DemosExample from './DemosExample';
 import Admin from './pages/Admin';
 import LandingStack from './pages/LandingStack';
 import RetirementForm from "./RetirementForm.tsx";
+import Dashboard from './pages/Dashboard';
 
 function App() {
     return (
@@ -11,6 +12,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<DemosExample />} />
                 <Route path="/calculator" element={<RetirementForm />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/stack" element={<LandingStack />} />
             </Routes>

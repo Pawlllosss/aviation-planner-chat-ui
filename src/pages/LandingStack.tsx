@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -27,10 +27,13 @@ const AVERAGE_PENSION = 3500;
 
 function LandingStack() {
     const navigate = useNavigate();
-    const [amount, setAmount] = useState('');
-    const [displayAmount, setDisplayAmount] = useState('');
-    const [debouncedAmount, setDebouncedAmount] = useState(0);
-    const [showFeedback, setShowFeedback] = useState(false);
+    const location = useLocation();
+    const expectedPension = location.state?.expectedPension || 0;
+
+    const [amount, setAmount] = useState(expectedPension > 0 ? expectedPension.toString() : '');
+    const [displayAmount, setDisplayAmount] = useState(expectedPension > 0 ? expectedPension.toLocaleString('pl-PL') : '');
+    const [debouncedAmount, setDebouncedAmount] = useState(expectedPension || 0);
+    const [showFeedback, setShowFeedback] = useState(expectedPension > 0);
 
     const formatNumber = (value: string) => {
         const num = value.replace(/\s/g, '');

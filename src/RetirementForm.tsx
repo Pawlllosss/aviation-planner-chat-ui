@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import axios from "axios";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { api } from './utils/api';
+import type { PensionResponse } from './types/pension';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 interface FormData {
   age: number;
@@ -14,6 +16,7 @@ interface FormData {
 
 const RetirementForm = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const desiredAmount = location.state?.desiredAmount || 0;
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormData>({
@@ -34,11 +37,8 @@ const RetirementForm = () => {
   useEffect(() => {
     if (!age || !sex) return;
 
-    const ageNum = parseInt(age);
-    if (isNaN(ageNum)) return;
-
     const currentYear = new Date().getFullYear();
-    const birthYear = currentYear - ageNum;
+    const birthYear = currentYear - age;
 
     // Default retirement ages: male 65, female 60
     const retirementAge = sex === 'M' ? 65 : 60;
@@ -49,8 +49,11 @@ const RetirementForm = () => {
   const onSubmit = async (data: FormData) => {
     try {
         console.log(data)
-      const response = await axios.post<FormData>("/api/pension/calculate", data);
-      console.log('Response:', response.data);
+      const response = await api.post<PensionResponse>("/api/pension/calculate", data);
+      console.log('Response:', response);
+
+      // Navigate to dashboard with response data and expected pension
+      navigate('/dashboard', { state: { data: response, expectedPension: data.expectedPension } });
     } catch (error) {
       console.error('Error submitting form:', error);
     }
@@ -58,6 +61,30 @@ const RetirementForm = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white p-8" style={{ animation: 'fadeIn 0.5s ease-out' }}>
+      {/* Back Button - Top Left */}
+      <button
+        type="button"
+        onClick={() => navigate('/stack', { state: { expectedPension: watch('expectedPension') } })}
+        className="transition-all hover:scale-110"
+        style={{
+          position: 'fixed',
+          top: '1.5rem',
+          left: '1.5rem',
+          color: 'rgb(63, 132, 210)',
+          backgroundColor: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          padding: '0.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}
+        aria-label="Wróć do planowania"
+      >
+        <ArrowBackIcon sx={{ fontSize: 32 }} />
+      </button>
+
       <div className="max-w-4xl w-full" style={{ animation: 'slideInFromRight 0.6s ease-out' }}>
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
