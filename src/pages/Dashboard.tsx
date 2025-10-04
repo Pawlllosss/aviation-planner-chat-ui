@@ -340,7 +340,7 @@ const Dashboard = () => {
         {/* Back Button */}
         <div className="text-center">
           <button
-            onClick={() => navigate('/calculator', { state: { desiredAmount: expectedPension } })}
+            onClick={() => navigate('/calculator', { state: { expectedPension: expectedPension } })}
             className="text-xl font-bold px-12 py-4 rounded-lg text-white transition-transform hover:scale-105 shadow-lg"
             style={{ backgroundColor: 'rgb(0, 65, 110)' }}
           >
