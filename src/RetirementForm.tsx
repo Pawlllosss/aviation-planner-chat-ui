@@ -52,8 +52,8 @@ const RetirementForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white p-8">
-      <div className="max-w-4xl w-full">
+    <div className="min-h-screen flex items-center justify-center bg-white p-8" style={{ animation: 'fadeIn 0.5s ease-out' }}>
+      <div className="max-w-4xl w-full" style={{ animation: 'slideInFromRight 0.6s ease-out' }}>
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
             Oblicz swoją przyszłą emeryturę

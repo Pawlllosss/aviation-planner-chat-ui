@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -25,6 +26,7 @@ ChartJS.register(
 const AVERAGE_PENSION = 3500;
 
 function LandingStack() {
+    const navigate = useNavigate();
     const [amount, setAmount] = useState('');
     const [displayAmount, setDisplayAmount] = useState('');
     const [debouncedAmount, setDebouncedAmount] = useState(0);
@@ -252,7 +254,7 @@ function LandingStack() {
                 </div>
 
                 {showFeedback && (
-                    <div className="mt-8 transition-opacity duration-500 opacity-100">
+                    <div className="mt-8" style={{ animation: 'fadeInUp 0.4s ease-out' }}>
                         <h2 className="text-xl font-bold text-center mb-4" style={{ color: 'rgb(0, 65, 110)' }}>
                             Porównanie z rzeczywistością
                         </h2>
@@ -271,6 +273,19 @@ function LandingStack() {
                                 Różnica: <span className="font-bold">{difference > 0 ? '+' : ''}{difference.toLocaleString('pl-PL')} zł</span>
                             </div>
                         )}
+
+                        <div className="flex justify-center mt-12">
+                            <button
+                                onClick={() => navigate('/calculator')}
+                                className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
+                                style={{
+                                    backgroundColor: 'rgb(0, 153, 63)',
+                                    color: 'white'
+                                }}
+                            >
+                                Zaplanuj swoją emeryturę
+                            </button>
+                        </div>
                     </div>
                 )}
 
