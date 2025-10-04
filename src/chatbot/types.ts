@@ -4,6 +4,7 @@ export interface RetirementFormData {
   grossSalary?: number;
   startYear?: number;
   retirementYear?: number;
+  desiredAmount?: number;
   expectedPension?: number;
   zipCode?: string;
   currentStep?: string;

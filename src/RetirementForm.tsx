@@ -19,19 +19,18 @@ const RetirementForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Support both desiredAmount (from slider) and chatbot data
-  const chatbotData = location.state || {};
-  const desiredAmount = chatbotData.desiredAmount || chatbotData.expectedPension || 0;
+  const stateData = location.state || {};
+  const expectedPension = stateData.expectedPension || 0;
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormData>({
     defaultValues: {
-      age: chatbotData.age || 35,
-      sex: chatbotData.sex || 'M',
-      grossSalary: chatbotData.grossSalary || 5050,
-      startYear: chatbotData.startYear || 2025,
-      retirementYear: chatbotData.retirementYear || 2060,
-      expectedPension: desiredAmount,
-      zipCode: chatbotData.zipCode || ''
+      age: stateData.age || 35,
+      sex: stateData.sex || 'M',
+      grossSalary: stateData.grossSalary || 5050,
+      startYear: stateData.startYear || 2025,
+      retirementYear: stateData.retirementYear || 2060,
+      expectedPension: expectedPension,
+      zipCode: stateData.zipCode || ''
     }
   });
 
@@ -98,13 +97,13 @@ const RetirementForm = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Desired Pension - Display Only */}
+          {/* Expected Pension - Display Only */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <label style={{ color: 'rgb(0, 65, 110)', fontWeight: '700', fontSize: '1.25rem', marginBottom: '0.5rem', display: 'block' }}>
               Oczekiwana emerytura miesięczna
             </label>
             <div className="text-3xl font-bold text-center py-2" style={{ color: 'rgb(0, 153, 63)' }}>
-              {desiredAmount > 0 ? desiredAmount.toLocaleString('pl-PL') : '0'}
+              {expectedPension > 0 ? expectedPension.toLocaleString('pl-PL') : '0'}
             </div>
           </div>
 

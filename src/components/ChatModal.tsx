@@ -143,7 +143,7 @@ const ChatModal = ({ isOpen, onClose, openAIKey, desiredAmount }: ChatModalProps
   const handleComplete = (formData: RetirementFormData) => {
     console.log('Form completed:', formData);
     onClose();
-    navigate('/calculator', { state: formData });
+    navigate('/calculator', { state: { ...formData, expectedPension: desiredAmount } });
   };
 
   const initialState = {

@@ -131,20 +131,10 @@ class ActionProvider {
         const currentYear = new Date().getFullYear();
         if (year && year >= currentYear && year <= 2100) {
           formData.retirementYear = year;
-          formData.currentStep = 'expectedPension';
-          return `Rok ${year}. Jaką miesięczną emeryturę chciałbyś/chciałabyś otrzymywać? (w złotych)`;
+          formData.currentStep = 'zipCode';
+          return `Rok ${year}. Podaj jeszcze kod pocztowy (format XX-XXX) lub napisz "pomiń".`;
         }
         return 'Proszę podać poprawny przyszły rok przejścia na emeryturę.';
-      }
-
-      case 'expectedPension': {
-        const pension = this.extractNumber(message);
-        if (pension && pension >= 0 && pension <= 100000) {
-          formData.expectedPension = pension;
-          formData.currentStep = 'zipCode';
-          return `${pension.toLocaleString('pl-PL')} zł. Na koniec, jaki jest Twój kod pocztowy? (format: XX-XXX, opcjonalnie - napisz "pomiń" jeśli nie chcesz podawać)`;
-        }
-        return 'Proszę podać poprawną kwotę oczekiwanej emerytury.';
       }
 
       case 'zipCode': {
