@@ -49,7 +49,7 @@ const RetirementForm = () => {
   const onSubmit = async (data: FormData) => {
     try {
         console.log(data)
-      const response = await axios.post<FormData>("/api/demos", data);
+      const response = await axios.post<FormData>("/api/pension/calculate", data);
       console.log('Response:', response.data);
     } catch (error) {
       console.error('Error submitting form:', error);
