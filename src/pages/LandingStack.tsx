@@ -220,6 +220,19 @@ function LandingStack() {
                                                     boxShadow: '0 3px 16px rgba(0, 0, 0, 0.25)',
                                                 },
                                             },
+                                            '& .MuiSlider-mark': {
+                                                backgroundColor: 'rgb(63, 132, 210)',
+                                                height: 16,
+                                                width: 4,
+                                                borderRadius: 2,
+                                                opacity: 1,
+                                            },
+                                            '& .MuiSlider-markLabel': {
+                                                color: 'rgb(63, 132, 210)',
+                                                fontWeight: 700,
+                                                fontSize: '1rem',
+                                                marginTop: '8px',
+                                            },
                                         }}
                                     />
                                 </div>
@@ -268,11 +281,9 @@ function LandingStack() {
                             />
                         </div>
 
-                        {difference !== 0 && (
-                            <div className="text-center mt-8 text-xl" style={{ color: 'rgb(0, 65, 110)' }}>
-                                Różnica: <span className="font-bold">{difference > 0 ? '+' : ''}{difference.toLocaleString('pl-PL')} zł</span>
-                            </div>
-                        )}
+                        <div className="text-center mt-8 text-xl" style={{ color: 'rgb(0, 65, 110)' }}>
+                            Różnica: <span className="font-bold">{difference > 0 ? '+' : ''}{difference.toLocaleString('pl-PL')} zł</span>
+                        </div>
 
                         <div className="flex justify-center mt-12">
                             <button
