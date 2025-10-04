@@ -142,7 +142,7 @@ function LandingStack() {
     };
 
     return (
-        <div className="h-screen flex items-center justify-center bg-white p-4 overflow-hidden">
+        <div className="h-screen flex items-center justify-center bg-white p-4" style={{ overflow: 'hidden' }}>
             <div className="max-w-4xl w-full">
                 <div className="text-center mb-6">
                     <h1 className="text-4xl font-bold mb-6" style={{ color: 'rgb(0, 65, 110)' }}>

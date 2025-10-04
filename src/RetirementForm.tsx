@@ -60,11 +60,11 @@ const RetirementForm = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-white overflow-hidden" style={{ animation: 'fadeIn 0.5s ease-out' }}>
+    <div className="h-screen flex items-center justify-center bg-white" style={{ animation: 'fadeIn 0.5s ease-out', overflow: 'hidden' }}>
       {/* Back Button - Top Left */}
       <button
         type="button"
-        onClick={() => navigate('/stack', { state: { expectedPension: watch('expectedPension') } })}
+        onClick={() => navigate('/', { state: { expectedPension: watch('expectedPension') } })}
         className="transition-all hover:scale-110"
         style={{
           position: 'fixed',
