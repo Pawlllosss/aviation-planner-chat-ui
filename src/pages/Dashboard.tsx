@@ -149,9 +149,19 @@ const Dashboard = () => {
       <div className="max-w-7xl mx-auto" style={{ animation: 'slideInFromRight 0.6s ease-out' }}>
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-4" style={{ color: 'rgb(0, 65, 110)' }}>
+          <h1 className="text-5xl font-bold mb-6" style={{ color: 'rgb(0, 65, 110)' }}>
             Symulacja Emerytalna
           </h1>
+          {expectedPension > 0 && (
+            <div className="mb-6">
+              <p className="text-xl mb-2" style={{ color: 'rgb(0, 65, 110)' }}>
+                Twoja oczekiwana emerytura
+              </p>
+              <p className="text-4xl font-bold mb-4" style={{ color: 'rgb(0, 153, 63)' }}>
+                {formatNumber(expectedPension)} zł
+              </p>
+            </div>
+          )}
           <p className="text-xl" style={{ color: 'rgb(63, 132, 210)' }}>
             Twoja prognozowana emerytura
           </p>
@@ -304,7 +314,7 @@ const Dashboard = () => {
             {/* Nominal Delayed Scenarios */}
             {nominalPension.delayedScenarios.length > 0 && (
               <div className="p-8 rounded-xl shadow-lg" style={{ backgroundColor: 'rgba(0, 153, 63, 0.05)', border: '3px solid rgb(0, 153, 63)' }}>
-                <h3 className="text-2xl font-bold mb-6 text-center" style={{ color: 'rgb(0, 65, 110)' }}>
+                <h3 className="text-xl font-bold mb-6 text-center" style={{ color: 'rgb(0, 65, 110)' }}>
                   Scenariusze opóźnienia (rzeczywista)
                 </h3>
                 <div className="space-y-4">
@@ -330,8 +340,8 @@ const Dashboard = () => {
             {/* Real Delayed Scenarios */}
             {realPension.delayedScenarios.length > 0 && (
               <div className="p-8 rounded-xl shadow-lg" style={{ backgroundColor: 'rgba(63, 132, 210, 0.05)', border: '3px solid rgb(63, 132, 210)' }}>
-                <h3 className="text-2xl font-bold mb-6 text-center" style={{ color: 'rgb(0, 65, 110)' }}>
-                  Scenariusze opóźnienia (urealniona)
+                <h3 className="text-xl font-bold mb-6 text-center" style={{ color: 'rgb(0, 65, 110)' }}>
+                  Scenariusze opóźnienia (z uwzględnieniem inflacji)
                 </h3>
                 <div className="space-y-4">
                   {realPension.delayedScenarios.map((scenario, index) => (
