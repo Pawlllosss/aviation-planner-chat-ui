@@ -547,7 +547,13 @@ const Dashboard = () => {
         {/* Action Buttons */}
         <div className="flex justify-center gap-4 flex-wrap">
           <button
-            onClick={() => navigate('/calculator', { state: { expectedPension: expectedPension } })}
+            onClick={() => navigate('/calculator', {
+              state: {
+                ...formInputData,
+                expectedPension: expectedPension,
+                retirementYear: retirementYear
+              }
+            })}
             className="text-xl font-bold px-12 py-4 rounded-lg text-white transition-transform hover:scale-105 shadow-lg"
             style={{ backgroundColor: 'rgb(0, 65, 110)' }}
           >
