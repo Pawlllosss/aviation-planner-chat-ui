@@ -16,6 +16,7 @@ import { Slider } from '@mui/material';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import ChatIcon from '@mui/icons-material/Chat';
 import FeedIcon from '@mui/icons-material/Feed';
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 
 ChartJS.register(
     CategoryScale,
@@ -41,6 +42,17 @@ function LandingStack() {
     const [debouncedAmount, setDebouncedAmount] = useState(expectedPension || 0);
     const [showFeedback, setShowFeedback] = useState(false);
     const [isChatOpen, setIsChatOpen] = useState(false);
+
+    const funFacts = [
+        'Czy wiesz, że najwyższą emeryturę w Polsce otrzymuje mieszkaniec województwa śląskiego? Wynosi ona ponad 51 350 zł, pracował przez 62 lata i nigdy nie był na zwolnieniu lekarskim!',
+        'Czy wiesz, że najniższa emerytura w Polsce wynosi zaledwie 2 grosze? Otrzymuje ją kobieta z Biłgoraja, która przepracowała tylko 1 dzień.',
+        'Czy wiesz, że w Polsce jest ponad 622 tysiące emerytów, którzy otrzymują emeryturę wyższą niż 7 000 zł miesięcznie?',
+        'Czy wiesz, że różnica między średnią emeryturą kobiet (3 422 zł) a mężczyzn (4 979 zł) wynosi aż 1 557 zł?',
+        'Czy wiesz, że druga najwyższa emerytura w Polsce wynosi 40 800 zł? Otrzymuje ją mężczyzna, który przepracował 59 lat i zakończył karierę w wieku 83 lat!'
+    ];
+    const [currentFunFact] = useState(() =>
+        funFacts[Math.floor(Math.random() * funFacts.length)]
+    );
 
     const openAIKey = import.meta.env.VITE_OPENAI_API_KEY;
     const formatNumber = (value: string) => {
@@ -325,6 +337,19 @@ function LandingStack() {
                             </div>
                         </div>
                     </div>
+
+                    {!showFeedback && (
+                        <div className="mt-8 text-center p-6 rounded-lg" style={{ border: '2px solid rgba(190, 195, 206, 0.4)' }}>
+                            <h3 className="text-xl font-bold mb-4 flex items-center justify-center gap-2"
+                                style={{ color: 'rgb(0, 65, 110)' }}>
+                                <TipsAndUpdatesIcon />
+                                Ciekawostka
+                            </h3>
+                            <p className="text-lg" style={{ color: 'rgb(0, 65, 110)' }}>
+                                {currentFunFact}
+                            </p>
+                        </div>
+                    )}
 
                     {showFeedback && (
                         <div className="mt-8">
