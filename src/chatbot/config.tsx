@@ -7,19 +7,20 @@ const BotAvatar = () => {
       width: '40px',
       height: '40px',
       borderRadius: '50%',
-      backgroundColor: 'rgb(0, 65, 110)',
+      backgroundColor: 'white',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
+        border: '0.1rem solid',
     }}>
       <img
-        src="/favicon.ico"
+        src="/zus.png"
         alt="ZUS Bot"
         style={{
-          width: '28px',
-          height: '28px',
-          objectFit: 'contain'
+          width: '48px',
+          height: '48px',
+          objectFit: 'contain', background: 'white'
         }}
       />
     </div>
