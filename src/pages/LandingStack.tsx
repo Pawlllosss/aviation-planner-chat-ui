@@ -416,7 +416,7 @@ function LandingStack() {
                                         color: 'white',
                                         minWidth: '250px'
                                     }}
-                                    title="Porozmawiaj z AI asystentem"
+                                    title="Uzupełnij z AI asystentem"
                                 >
                                     <SmartToyIcon style={{ fontSize: '1.5rem' }} />
                                     Porozmawiaj z asystentem
