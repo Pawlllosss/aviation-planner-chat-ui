@@ -399,13 +399,20 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {nominalPension.extraYearsNeededForExpected && (
+              {nominalPension.extraYearsNeededForExpected !== undefined && nominalPension.extraYearsNeededForExpected > 0 && (
                 <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(255, 179, 79, 0.2)', border: '2px solid rgb(255, 179, 79)' }}>
                   <div className="flex justify-between items-center">
                     <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Dodatkowe lata pracy dla oczekiwanej emerytury</span>
                     <span className="text-xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
                       {nominalPension.extraYearsNeededForExpected} {nominalPension.extraYearsNeededForExpected === 1 ? 'rok' : nominalPension.extraYearsNeededForExpected < 5 ? 'lata' : 'lat'}
                     </span>
+                  </div>
+                </div>
+              )}
+              {nominalPension.extraYearsNeededForExpected !== undefined && nominalPension.extraYearsNeededForExpected <= 0 && (
+                <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(0, 153, 63, 0.2)', border: '2px solid rgb(0, 153, 63)' }}>
+                  <div className="text-center">
+                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Otrzymasz emeryturę zgodną z oczekiwaniami!</span>
                   </div>
                 </div>
               )}
@@ -463,13 +470,20 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {realPension.extraYearsNeededForExpected && (
+              {realPension.extraYearsNeededForExpected !== undefined && realPension.extraYearsNeededForExpected > 0 && (
                 <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(255, 179, 79, 0.2)', border: '2px solid rgb(255, 179, 79)' }}>
                   <div className="flex justify-between items-center">
                     <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Dodatkowe lata pracy dla oczekiwanej emerytury</span>
                     <span className="text-xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
                       {realPension.extraYearsNeededForExpected} {realPension.extraYearsNeededForExpected === 1 ? 'rok' : realPension.extraYearsNeededForExpected < 5 ? 'lata' : 'lat'}
                     </span>
+                  </div>
+                </div>
+              )}
+              {realPension.extraYearsNeededForExpected !== undefined && realPension.extraYearsNeededForExpected <= 0 && (
+                <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(0, 153, 63, 0.2)', border: '2px solid rgb(0, 153, 63)' }}>
+                  <div className="text-center">
+                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Otrzymasz emeryturę zgodną z oczekiwaniami!</span>
                   </div>
                 </div>
               )}
