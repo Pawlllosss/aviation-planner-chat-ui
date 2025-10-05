@@ -9,6 +9,7 @@ import 'react-chatbot-kit/build/main.css';
 import CloseIcon from '@mui/icons-material/Close';
 import MicIcon from '@mui/icons-material/Mic';
 import MicOffIcon from '@mui/icons-material/MicOff';
+import SendIcon from '@mui/icons-material/Send';
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -22,6 +23,26 @@ const ChatModal = ({ isOpen, onClose, openAIKey, desiredAmount }: ChatModalProps
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState<any>(null);
   const [voiceMode, setVoiceMode] = useState(false);
+
+  // Inject SendIcon into send button
+  useEffect(() => {
+    const injectSendIcon = () => {
+      const sendButton = document.querySelector('.react-chatbot-kit-chat-btn-send');
+      if (sendButton && !sendButton.querySelector('.custom-send-icon')) {
+        sendButton.innerHTML = '';
+        const iconContainer = document.createElement('span');
+        iconContainer.className = 'custom-send-icon';
+        iconContainer.innerHTML = '<svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true" style="width: 22px; height: 22px; fill: white;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>';
+        sendButton.appendChild(iconContainer);
+      }
+    };
+
+    // Run immediately and also after a delay to ensure chatbot is rendered
+    injectSendIcon();
+    const timer = setTimeout(injectSendIcon, 100);
+
+    return () => clearTimeout(timer);
+  }, [isOpen]);
 
   useEffect(() => {
     // Initialize Web Speech API
@@ -158,18 +179,22 @@ const ChatModal = ({ isOpen, onClose, openAIKey, desiredAmount }: ChatModalProps
 
   return (
     <div
+      className="chat-modal-container"
       style={{
         position: 'fixed',
-        top: 0,
-        right: 0,
-        height: '100vh',
-        width: '450px',
+        bottom: '24px',
+        right: '24px',
+        height: '600px',
+        width: '400px',
+        maxHeight: 'calc(100vh - 48px)',
         backgroundColor: 'white',
-        boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.15)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+        borderRadius: '16px',
         zIndex: 9999,
         display: 'flex',
         flexDirection: 'column',
-        animation: 'slideInFromRight 0.3s ease-out',
+        animation: 'slideUpFromBottom 0.3s ease-out',
+        overflow: 'hidden',
       }}
     >
       {/* Header */}
@@ -177,15 +202,17 @@ const ChatModal = ({ isOpen, onClose, openAIKey, desiredAmount }: ChatModalProps
         style={{
           backgroundColor: 'rgb(0, 65, 110)',
           color: 'white',
-          padding: '1.5rem',
+          padding: '1.25rem 1.5rem',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           borderBottom: '3px solid rgb(63, 132, 210)',
+          borderTopLeftRadius: '16px',
+          borderTopRightRadius: '16px',
         }}
       >
-        <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 'bold' }}>
-          Asystent Emerytalny
+        <h2 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 'bold' }}>
+          Inteligentny Asystent Emerytalny
         </h2>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           {recognition && (
@@ -302,12 +329,14 @@ const ChatModal = ({ isOpen, onClose, openAIKey, desiredAmount }: ChatModalProps
       )}
 
       <style>{`
-        @keyframes slideInFromRight {
+        @keyframes slideUpFromBottom {
           from {
-            transform: translateX(100%);
+            transform: translateY(100%);
+            opacity: 0;
           }
           to {
-            transform: translateX(0);
+            transform: translateY(0);
+            opacity: 1;
           }
         }
 
@@ -317,6 +346,20 @@ const ChatModal = ({ isOpen, onClose, openAIKey, desiredAmount }: ChatModalProps
           }
           50% {
             opacity: 0.7;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .chat-modal-container {
+            bottom: 0 !important;
+            right: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: calc(100vh - 48px) !important;
+            max-height: calc(100vh - 48px) !important;
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            margin: 0 !important;
           }
         }
 
@@ -360,14 +403,17 @@ const ChatModal = ({ isOpen, onClose, openAIKey, desiredAmount }: ChatModalProps
         .react-chatbot-kit-chat-input-container {
           padding: 1rem;
           border-top: 1px solid rgb(190, 195, 206);
+          background-color: white;
+          border-bottom-left-radius: 16px;
+          border-bottom-right-radius: 16px;
         }
 
         .react-chatbot-kit-chat-input {
           border: 2px solid rgb(190, 195, 206);
           border-radius: 25px;
-          padding: 0.75rem 1rem;
+          padding: 0.75rem 3.5rem 0.75rem 1rem;
           font-size: 1rem;
-          width: 100%;
+          flex: 1;
           outline: none;
           transition: border-color 0.2s;
         }
@@ -380,22 +426,38 @@ const ChatModal = ({ isOpen, onClose, openAIKey, desiredAmount }: ChatModalProps
           background-color: rgb(0, 153, 63);
           border: none;
           border-radius: 50%;
-          width: 40px;
-          height: 40px;
+          width: 44px;
+          height: 44px;
+          min-width: 44px;
           color: white;
           cursor: pointer;
           font-weight: bold;
           transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          right: 4px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .react-chatbot-kit-chat-btn-send .custom-send-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .react-chatbot-kit-chat-btn-send:hover {
           background-color: rgb(0, 130, 50);
-          transform: scale(1.05);
+          transform: translateY(-50%) scale(1.05);
         }
 
         .react-chatbot-kit-chat-input-form {
           display: flex;
           gap: 0.5rem;
+          position: relative;
+          align-items: center;
         }
       `}</style>
     </div>

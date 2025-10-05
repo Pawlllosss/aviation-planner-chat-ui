@@ -390,6 +390,45 @@ function LandingStack() {
 
             </div>
 
+            {/* Chat FAB - Only show when chat is closed and there's a desired amount */}
+            {!isChatOpen && showFeedback && debouncedAmount > 0 && (
+                <button
+                    onClick={() => setIsChatOpen(true)}
+                    style={{
+                        position: 'fixed',
+                        bottom: '24px',
+                        right: '24px',
+                        width: '60px',
+                        height: '60px',
+                        borderRadius: '50%',
+                        backgroundColor: 'rgb(63, 132, 210)',
+                        color: 'white',
+                        border: 'none',
+                        boxShadow: '0 4px 16px rgba(63, 132, 210, 0.4)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.75rem',
+                        transition: 'all 0.3s ease',
+                        zIndex: 9998,
+                        animation: 'fabBounce 0.5s ease-out',
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.1)';
+                        e.currentTarget.style.boxShadow = '0 6px 24px rgba(63, 132, 210, 0.5)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                        e.currentTarget.style.boxShadow = '0 4px 16px rgba(63, 132, 210, 0.4)';
+                    }}
+                    title="Czat z asystentem"
+                    aria-label="Otwórz czat z asystentem"
+                >
+                    💬
+                </button>
+            )}
+
             {/* Chat Modal */}
             <ChatModal
                 isOpen={isChatOpen}
@@ -397,6 +436,22 @@ function LandingStack() {
                 openAIKey={openAIKey}
                 desiredAmount={debouncedAmount}
             />
+
+            <style>{`
+                @keyframes fabBounce {
+                    0% {
+                        transform: scale(0) rotate(-180deg);
+                        opacity: 0;
+                    }
+                    60% {
+                        transform: scale(1.2) rotate(20deg);
+                    }
+                    100% {
+                        transform: scale(1) rotate(0deg);
+                        opacity: 1;
+                    }
+                }
+            `}</style>
         </div>
     );
 }
