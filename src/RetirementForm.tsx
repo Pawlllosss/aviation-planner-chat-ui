@@ -56,12 +56,25 @@ const RetirementForm = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
-        console.log(data)
+        console.log('Form data:', data)
       const response = await api.post<PensionResponse>("/pension/calculate", data);
       console.log('Response:', response);
 
-      // Navigate to dashboard with response data and expected pension
-      navigate('/dashboard', { state: { data: response, expectedPension: data.expectedPension, retirementYear: data.retirementYear } });
+      // Navigate to dashboard with response data, expected pension, and all form inputs
+      navigate('/dashboard', {
+        state: {
+          data: response,
+          expectedPension: data.expectedPension,
+          retirementYear: data.retirementYear,
+          age: data.age,
+          sex: data.sex,
+          grossSalary: data.grossSalary,
+          startYear: data.startYear,
+          includeSickLeave: data.includeSickLeave,
+          avgSickDaysPerYear: data.avgSickDaysPerYear,
+          zipCode: data.zipCode
+        }
+      });
     } catch (error) {
       console.error('Error submitting form:', error);
     }

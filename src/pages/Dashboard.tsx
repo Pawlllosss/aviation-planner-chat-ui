@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -11,7 +12,9 @@ import {
   Legend,
   Filler
 } from 'chart.js';
+import DownloadIcon from '@mui/icons-material/Download';
 import type { PensionResponse } from '../types/pension';
+import type { TDocumentDefinitions } from 'pdfmake/interfaces';
 
 // Register Chart.js components
 ChartJS.register(
@@ -28,9 +31,21 @@ ChartJS.register(
 const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const contentRef = useRef<HTMLDivElement>(null);
   const data: PensionResponse | null = location.state?.data || null;
   const expectedPension: number = location.state?.expectedPension || 0;
   const retirementYear: number = location.state?.retirementYear || 2060;
+
+  // Get form input data from location state
+  const formInputData = {
+    age: location.state?.age,
+    sex: location.state?.sex,
+    grossSalary: location.state?.grossSalary,
+    startYear: location.state?.startYear,
+    includeSickLeave: location.state?.includeSickLeave,
+    avgSickDaysPerYear: location.state?.avgSickDaysPerYear,
+    zipCode: location.state?.zipCode
+  };
 
   if (!data) {
     navigate('/calculator');
@@ -42,6 +57,170 @@ const Dashboard = () => {
   // Format number to Polish locale
   const formatNumber = (num: number) => {
     return num.toLocaleString('pl-PL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
+  const downloadPDF = async () => {
+    try {
+      // Dynamic import of pdfMake to avoid SSR issues
+      const pdfMake = (await import('pdfmake/build/pdfmake')).default;
+      const pdfFonts = await import('pdfmake/build/vfs_fonts');
+      (pdfMake as any).vfs = pdfFonts;
+
+      // Prepare input data
+      const inputData: string[][] = [
+        ['Wiek', `${formInputData.age || 'N/A'}`],
+        ['Płeć', formInputData.sex === 'M' ? 'Mężczyzna' : 'Kobieta'],
+        ['Zarobki miesięczne brutto', `${formatNumber(formInputData.grossSalary || 0)} zł`],
+        ['Rok rozpoczęcia pracy', `${formInputData.startYear || 'N/A'}`],
+        ['Rok przejścia na emeryturę', `${retirementYear}`],
+      ];
+
+      if (formInputData.includeSickLeave) {
+        inputData.push(['Średnia dni chorobowych rocznie', `${formInputData.avgSickDaysPerYear || 0}`]);
+      }
+      if (formInputData.zipCode) {
+        inputData.push(['Kod pocztowy', formInputData.zipCode]);
+      }
+      if (expectedPension > 0) {
+        inputData.push(['Oczekiwana emerytura', `${formatNumber(expectedPension)} zł`]);
+      }
+
+      // Get chart image
+      const chartCanvas = document.querySelector('canvas');
+      const chartImage = chartCanvas ? chartCanvas.toDataURL('image/png', 0.8) : null;
+
+      // Build PDF content
+      const content: TDocumentDefinitions['content'] = [
+        { text: 'Raport Symulacji Emerytalnej', style: 'header', alignment: 'center' },
+        { text: '\n' },
+        { text: 'Wprowadzone dane', style: 'subheader' },
+        {
+          table: {
+            widths: ['*', '*'],
+            body: inputData.map(row => [
+              { text: row[0], bold: true },
+              { text: row[1] }
+            ])
+          },
+          layout: 'lightHorizontalLines'
+        },
+        { text: '\n' },
+        { text: 'Wysokość rzeczywista', style: 'subheader' },
+        {
+          table: {
+            widths: ['*', '*'],
+            body: [
+              [{ text: 'Z uwzględnieniem chorobowych', bold: true }, `${formatNumber(nominalPension.withSickLeave)} zł`],
+              [{ text: 'Bez uwzględnienia chorobowych', bold: true }, `${formatNumber(nominalPension.withoutSickLeave)} zł`],
+              [{ text: 'Stopa zastąpienia', bold: true }, `${formatNumber(nominalPension.replacementRate)}%`],
+              [{ text: 'Porównanie do średniej', bold: true }, `${formatNumber(nominalPension.vsAveragePension)}%`],
+              [{ text: `Średnia emerytura w ${retirementYear}`, bold: true }, `${formatNumber(nominalPension.finalAveragePension)} zł`],
+              [{ text: 'Prognozowana pensja', bold: true }, `${formatNumber(nominalPension.finalSalary)} zł`],
+            ]
+          },
+          layout: 'lightHorizontalLines'
+        },
+        { text: '\n' },
+        { text: 'Wysokość z uwzględnieniem inflacji', style: 'subheader' },
+        {
+          table: {
+            widths: ['*', '*'],
+            body: [
+              [{ text: 'Z uwzględnieniem chorobowych', bold: true }, `${formatNumber(realPension.withSickLeave)} zł`],
+              [{ text: 'Bez uwzględnienia chorobowych', bold: true }, `${formatNumber(realPension.withoutSickLeave)} zł`],
+              [{ text: 'Stopa zastąpienia', bold: true }, `${formatNumber(realPension.replacementRate)}%`],
+              [{ text: 'Porównanie do średniej', bold: true }, `${formatNumber(realPension.vsAveragePension)}%`],
+              [{ text: `Średnia emerytura w ${retirementYear}`, bold: true }, `${formatNumber(realPension.finalAveragePension)} zł`],
+              [{ text: 'Prognozowana pensja', bold: true }, `${formatNumber(realPension.finalSalary)} zł`],
+            ]
+          },
+          layout: 'lightHorizontalLines'
+        }
+      ];
+
+      // Add delayed scenarios if they exist
+      if (nominalPension.delayedScenarios.length > 0) {
+        content.push(
+          { text: '\n', pageBreak: 'before' },
+          { text: 'Scenariusze opóźnienia (rzeczywista)', style: 'subheader' },
+          {
+            table: {
+              widths: ['*', '*', 'auto'],
+              headerRows: 1,
+              body: [
+                [{ text: 'Scenariusz', bold: true, fillColor: '#00993F', color: 'white' },
+                 { text: 'Emerytura', bold: true, fillColor: '#00993F', color: 'white' },
+                 { text: 'Wzrost', bold: true, fillColor: '#00993F', color: 'white' }],
+                ...nominalPension.delayedScenarios.map(s => [
+                  `Opóźnienie o ${s.years} ${s.years === 1 ? 'rok' : s.years < 5 ? 'lata' : 'lat'}`,
+                  `${formatNumber(s.pension)} zł`,
+                  `+${formatNumber(s.increasePct)}%`
+                ])
+              ]
+            },
+            layout: 'lightHorizontalLines'
+          }
+        );
+
+        if (realPension.delayedScenarios.length > 0) {
+          content.push(
+            { text: '\n' },
+            { text: 'Scenariusze opóźnienia (urealniona)', style: 'subheader' },
+            {
+              table: {
+                widths: ['*', '*', 'auto'],
+                headerRows: 1,
+                body: [
+                  [{ text: 'Scenariusz', bold: true, fillColor: '#3F84D2', color: 'white' },
+                   { text: 'Emerytura', bold: true, fillColor: '#3F84D2', color: 'white' },
+                   { text: 'Wzrost', bold: true, fillColor: '#3F84D2', color: 'white' }],
+                  ...realPension.delayedScenarios.map(s => [
+                    `Opóźnienie o ${s.years} ${s.years === 1 ? 'rok' : s.years < 5 ? 'lata' : 'lat'}`,
+                    `${formatNumber(s.pension)} zł`,
+                    `+${formatNumber(s.increasePct)}%`
+                  ])
+                ]
+              },
+              layout: 'lightHorizontalLines'
+            }
+          );
+        }
+      }
+
+      // Add chart if available
+      if (chartImage) {
+        content.push(
+          { text: '\n', pageBreak: 'before' },
+          { text: 'Progresja kapitału w czasie', style: 'subheader', alignment: 'center' },
+          { text: '\n' },
+          { image: chartImage, width: 500, alignment: 'center' }
+        );
+      }
+
+      const docDefinition = {
+        content,
+        styles: {
+          header: {
+            fontSize: 22,
+            bold: true,
+            margin: [0, 0, 0, 10] as [number, number, number, number]
+          },
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            margin: [0, 10, 0, 5] as [number, number, number, number]
+          }
+        },
+        defaultStyle: {
+          font: 'Roboto'
+        }
+      };
+
+      pdfMake.createPdf(docDefinition).download(`Raport_Emerytalny_${new Date().toISOString().split('T')[0]}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Wystąpił błąd podczas generowania PDF');
+    }
   };
 
   // Prepare chart data
@@ -82,7 +261,7 @@ const Dashboard = () => {
         labels: {
           font: {
             size: 14,
-            weight: '600' as const
+            weight: 'bold' as const
           },
           color: 'rgb(0, 65, 110)',
           padding: 20
@@ -92,14 +271,14 @@ const Dashboard = () => {
         backgroundColor: 'rgba(0, 65, 110, 0.9)',
         titleFont: {
           size: 14,
-          weight: '700' as const
+          weight: 'bold' as const
         },
         bodyFont: {
           size: 13
         },
         padding: 12,
         callbacks: {
-          label: function(context: any) {
+          label: function(context: { dataset: { label?: string }; parsed: { y: number | null } }) {
             let label = context.dataset.label || '';
             if (label) {
               label += ': ';
@@ -123,8 +302,8 @@ const Dashboard = () => {
             size: 12
           },
           color: 'rgb(0, 65, 110)',
-          callback: function(value: any) {
-            return formatNumber(value) + ' zł';
+          callback: function(value: string | number) {
+            return formatNumber(Number(value)) + ' zł';
           }
         }
       },
@@ -146,7 +325,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-white p-8" style={{ animation: 'fadeIn 0.5s ease-out' }}>
-      <div className="max-w-7xl mx-auto" style={{ animation: 'slideInFromRight 0.6s ease-out' }}>
+      <div ref={contentRef} className="max-w-7xl mx-auto" style={{ animation: 'slideInFromRight 0.6s ease-out' }}>
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-6" style={{ color: 'rgb(0, 65, 110)' }}>
@@ -365,8 +544,8 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* Back Button */}
-        <div className="text-center">
+        {/* Action Buttons */}
+        <div className="flex justify-center gap-4 flex-wrap">
           <button
             onClick={() => navigate('/calculator', { state: { expectedPension: expectedPension } })}
             className="text-xl font-bold px-12 py-4 rounded-lg text-white transition-transform hover:scale-105 shadow-lg"
@@ -374,6 +553,14 @@ const Dashboard = () => {
           >
             Wróć do kalkulatora
           </button>
+            <button
+                onClick={downloadPDF}
+                className="text-xl font-bold px-12 py-4 rounded-lg text-white transition-transform hover:scale-105 shadow-lg flex items-center gap-2"
+                style={{ backgroundColor: 'rgb(0, 153, 63)' }}
+            >
+                <DownloadIcon />
+                Pobierz PDF
+            </button>
         </div>
       </div>
     </div>
