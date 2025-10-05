@@ -178,6 +178,7 @@ function LandingStack() {
         scales: {
             y: {
                 beginAtZero: true,
+                suggestedMax: Math.max(debouncedAmount, AVERAGE_PENSION_MEN) * 1.15,
                 ticks: {
                     callback: (value: any) => `${value.toLocaleString('pl-PL')} zł`,
                     font: {
