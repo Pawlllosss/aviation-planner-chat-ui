@@ -13,6 +13,9 @@ import {
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Slider } from '@mui/material';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import ChatIcon from '@mui/icons-material/Chat';
+import FeedIcon from '@mui/icons-material/Feed';
 
 ChartJS.register(
     CategoryScale,
@@ -362,72 +365,42 @@ function LandingStack() {
                             Różnica: <span className="font-bold">{difference > 0 ? '+' : ''}{difference.toLocaleString('pl-PL')} zł</span>
                         </div>
 
-                        <div className="flex justify-center gap-4 mt-12">
-                            <button
-                                onClick={() => navigate('/calculator', { state: { expectedPension: debouncedAmount } })}
-                                className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50"
-                                style={{
-                                    backgroundColor: 'rgb(0, 153, 63)',
-                                    color: 'white'
-                                }}
-                            >
+                        <div className="mt-8">
+                            <h3 className="text-2xl font-bold text-center mb-4" style={{ color: 'rgb(0, 65, 110)' }}>
                                 Zaplanuj swoją emeryturę
-                            </button>
-                            <button
-                                onClick={() => setIsChatOpen(true)}
-                                className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                                style={{
-                                    backgroundColor: 'rgb(63, 132, 210)',
-                                    color: 'white'
-                                }}
-                                title="Otwórz czat z asystentem"
-                            >
-                                💬 Czat z asystentem
-                            </button>
+                            </h3>
+                            <div className="flex justify-center gap-4">
+                                <button
+                                    onClick={() => navigate('/calculator', { state: { expectedPension: debouncedAmount } })}
+                                    className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-green-500/50 flex items-center justify-center gap-2"
+                                    style={{
+                                        backgroundColor: 'rgb(0, 153, 63)',
+                                        color: 'white',
+                                        minWidth: '250px'
+                                    }}
+                                >
+                                    <FeedIcon style={{ fontSize: '1.5rem' }} />
+                                    Uzupełnij formularz
+                                </button>
+                                <button
+                                    onClick={() => setIsChatOpen(true)}
+                                    className="px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/50 flex items-center justify-center gap-2"
+                                    style={{
+                                        backgroundColor: 'rgb(63, 132, 210)',
+                                        color: 'white',
+                                        minWidth: '250px'
+                                    }}
+                                    title="Porozmawiaj z AI asystentem"
+                                >
+                                    <SmartToyIcon style={{ fontSize: '1.5rem' }} />
+                                    Porozmawiaj z asystentem
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
 
             </div>
-
-            {/* Chat FAB - Only show when chat is closed and there's a desired amount */}
-            {!isChatOpen && showFeedback && debouncedAmount > 0 && (
-                <button
-                    onClick={() => setIsChatOpen(true)}
-                    style={{
-                        position: 'fixed',
-                        bottom: '24px',
-                        right: '24px',
-                        width: '60px',
-                        height: '60px',
-                        borderRadius: '50%',
-                        backgroundColor: 'rgb(63, 132, 210)',
-                        color: 'white',
-                        border: 'none',
-                        boxShadow: '0 4px 16px rgba(63, 132, 210, 0.4)',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1.75rem',
-                        transition: 'all 0.3s ease',
-                        zIndex: 9998,
-                        animation: 'fabBounce 0.5s ease-out',
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.1)';
-                        e.currentTarget.style.boxShadow = '0 6px 24px rgba(63, 132, 210, 0.5)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
-                        e.currentTarget.style.boxShadow = '0 4px 16px rgba(63, 132, 210, 0.4)';
-                    }}
-                    title="Czat z asystentem"
-                    aria-label="Otwórz czat z asystentem"
-                >
-                    💬
-                </button>
-            )}
 
             {/* Chat Modal */}
             <ChatModal
