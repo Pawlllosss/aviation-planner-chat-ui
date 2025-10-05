@@ -12,7 +12,7 @@ export interface PensionDetails {
   finalAveragePension: number;
   finalSalary: number;
   delayedScenarios: DelayedScenario[];
-  salaryNeededForExpected: number | null;
+  extraYearsNeededForExpected: number | null;
 }
 
 export interface AccountProgression {

@@ -171,6 +171,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Nominal Pension Card */}
           <div className="p-8 rounded-xl shadow-lg" style={{ backgroundColor: 'rgba(0, 153, 63, 0.05)', border: '3px solid rgb(0, 153, 63)' }}>
+            {/*TODO zapytać*/}
             <h2 className="text-3xl font-bold mb-6 text-center" style={{ color: 'rgb(0, 65, 110)' }}>
               Wysokość rzeczywista
             </h2>
@@ -220,12 +221,12 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {nominalPension.salaryNeededForExpected && (
+              {nominalPension.extraYearsNeededForExpected && (
                 <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(255, 179, 79, 0.2)', border: '2px solid rgb(255, 179, 79)' }}>
                   <div className="flex justify-between items-center">
-                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Wymagana pensja dla oczekiwanej emerytury</span>
+                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Dodatkowe lata pracy dla oczekiwanej emerytury</span>
                     <span className="text-xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
-                      {formatNumber(nominalPension.salaryNeededForExpected)} zł
+                      {nominalPension.extraYearsNeededForExpected} {nominalPension.extraYearsNeededForExpected === 1 ? 'rok' : nominalPension.extraYearsNeededForExpected < 5 ? 'lata' : 'lat'}
                     </span>
                   </div>
                 </div>
@@ -284,12 +285,12 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {realPension.salaryNeededForExpected && (
+              {realPension.extraYearsNeededForExpected && (
                 <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(255, 179, 79, 0.2)', border: '2px solid rgb(255, 179, 79)' }}>
                   <div className="flex justify-between items-center">
-                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Wymagana pensja dla oczekiwanej emerytury</span>
+                    <span className="text-base font-semibold" style={{ color: 'rgb(0, 65, 110)' }}>Dodatkowe lata pracy dla oczekiwanej emerytury</span>
                     <span className="text-xl font-bold" style={{ color: 'rgb(0, 65, 110)' }}>
-                      {formatNumber(realPension.salaryNeededForExpected)} zł
+                      {realPension.extraYearsNeededForExpected} {realPension.extraYearsNeededForExpected === 1 ? 'rok' : realPension.extraYearsNeededForExpected < 5 ? 'lata' : 'lat'}
                     </span>
                   </div>
                 </div>
